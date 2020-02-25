@@ -23,3 +23,9 @@ Route::post('affiliates', 'AffiliateController@store');
 Route::put('affiliates/{affiliate}', 'AffiliateController@update');
 Route::delete('affiliates/{affiliate}', 'AffiliateController@delete');
 Route::get('affiliates/{affiliate}/members', 'AffiliateController@members');
+
+Route::get('parameters', 'AffiliateParameterController@index');
+Route::get('parameters/{parameter}', 'AffiliateParameterController@show');
+Route::post('parameters', 'AffiliateParameterController@store');
+Route::put('parameters/{parameter}', 'AffiliateParameterController@update');
+Route::delete('parameters/{parameter}', 'AffiliateParameterController@delete');
