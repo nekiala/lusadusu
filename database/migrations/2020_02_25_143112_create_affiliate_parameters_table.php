@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAffiliatesTable extends Migration
+class CreateAffiliateParametersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateAffiliatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('affiliates', function (Blueprint $table) {
+        Schema::create('affiliate_parameters', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('affiliate_parameter_id');
-            $table->unsignedBigInteger('user_id')->unique();
-            $table->boolean('status')->default(false);
-            $table->text('comments')->nullable()->default(null);
+            $table->integer('participation_number')->default(1);
+            $table->integer('victory_number')->default(0);
+            $table->integer('expiration_delay_in_days')->default(30);
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateAffiliatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('affiliates');
+        Schema::dropIfExists('affiliate_parameters');
     }
 }
