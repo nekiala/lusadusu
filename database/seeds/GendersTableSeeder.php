@@ -11,8 +11,6 @@ class GendersTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Gender::truncate();
-
         $faker = \Faker\Factory::create();
 
         for ($i = 0; $i < 2; $i ++) {

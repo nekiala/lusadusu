@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Affiliate;
+use App\AffiliateMember;
 use Illuminate\Http\Request;
 
 class AffiliateController extends Controller
@@ -24,6 +25,13 @@ class AffiliateController extends Controller
         $members = $affiliate->members();
 
         return response()->json($members, 200);
+    }
+
+    public function member(Request $request)
+    {
+        $member = AffiliateMember::create($request->all());
+
+        return response()->json($member, 201);
     }
 
     public function store(Request $request)
