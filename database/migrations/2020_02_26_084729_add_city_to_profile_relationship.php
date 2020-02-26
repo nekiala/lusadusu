@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCitiesTable extends Migration
+class AddCityToProfileRelationship extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateCitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('cities', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name')->unique();
-            $table->boolean('status')->default(1);
-            $table->timestamps();
+        Schema::table('profiles', function (Blueprint $table) {
+            $table->foreign('city_id')->references('id')
+                ->on('cities')->onDelete('restrict');
         });
     }
 
@@ -28,6 +26,8 @@ class CreateCitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cities');
+        Schema::table('profiles', function (Blueprint $table) {
+            //
+        });
     }
 }
