@@ -15,7 +15,17 @@ class CreateAffiliateMembersTable extends Migration
     {
         Schema::create('affiliate_members', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('affiliate_id');
+            $table->unsignedBigInteger('member_id');
             $table->timestamps();
+
+            $table->unique(['affiliate_id', 'member_id']);
+
+            $table->foreign('affiliate_id')->references('id')
+                ->on('affiliates')->onDelete('restrict');
+
+            $table->foreign('member_id')->references('id')
+                ->on('users')->onDelete('restrict');
         });
     }
 
