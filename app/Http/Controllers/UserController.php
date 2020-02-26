@@ -19,6 +19,11 @@ class UserController extends Controller
         return $user;
     }
 
+    public function profile(User $user)
+    {
+        return $user->profile()->get();
+    }
+
     public function update(Request $request, User $user)
     {
         $user->update($request->all());

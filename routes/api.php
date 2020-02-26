@@ -50,6 +50,7 @@ Route::get('users', 'UserController@index');
 Route::get('users/{user}', 'UserController@show');
 Route::put('users/{user}/update', 'UserController@update');
 Route::delete('users/{user}/delete', 'UserController@delete');
+Route::get('users/{user}/profile', 'UserController@profile');
 
 Route::get('categories', 'CategoryController@index');
 Route::get('categories/{category}', 'CategoryController@show');
@@ -75,3 +76,9 @@ Route::get('discussions/{discussion}', 'DiscussionController@show');
 Route::post('discussions', 'DiscussionController@store');
 Route::put('discussions/{discussion}', 'DiscussionController@update');
 Route::delete('discussions/{discussion}', 'DiscussionController@delete');
+
+Route::get('profiles', 'ProfileController@index');
+Route::get('profiles/{profile}', 'ProfileController@show');
+Route::post('profiles', 'ProfileController@store');
+Route::put('profiles/{profile}', 'ProfileController@update');
+Route::delete('profiles/{profile}', 'ProfileController@delete');

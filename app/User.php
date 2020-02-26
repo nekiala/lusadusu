@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    public function gender()
+    {
+        return $this->belongsTo(Gender::class);
+    }
+
     public function generateToken()
     {
         $this->api_token = str_random(60);
