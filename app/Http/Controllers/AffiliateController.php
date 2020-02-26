@@ -19,9 +19,11 @@ class AffiliateController extends Controller
         return $affiliate;
     }
 
-    public function members($id)
+    public function members(Affiliate $affiliate)
     {
+        $members = $affiliate->members();
 
+        return response()->json($members, 200);
     }
 
     public function store(Request $request)

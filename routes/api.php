@@ -29,3 +29,9 @@ Route::get('parameters/{parameter}', 'AffiliateParameterController@show');
 Route::post('parameters', 'AffiliateParameterController@store');
 Route::put('parameters/{parameter}', 'AffiliateParameterController@update');
 Route::delete('parameters/{parameter}', 'AffiliateParameterController@delete');
+
+Route::get('genders', 'GenderController@index');
+Route::get('genders/{gender}', 'GenderController@show');
+Route::post('genders', 'GenderController@store');
+Route::put('genders/{gender}', 'GenderController@update');
+Route::delete('genders/{gender}', 'GenderController@delete');
