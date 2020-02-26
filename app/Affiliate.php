@@ -12,4 +12,9 @@ class Affiliate extends Model
         'status',
         'comments'
     ];
+
+    public function members()
+    {
+        return $this->hasMany(AffiliateMember::class);
+    }
 }
