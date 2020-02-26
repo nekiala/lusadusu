@@ -21,7 +21,7 @@ class QuestionController extends Controller
 
     public function discussion(Question $question)
     {
-        return $question;
+        return $question->discussions()->get();
     }
 
     public function store(Request $request)
