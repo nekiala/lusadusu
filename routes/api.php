@@ -48,6 +48,5 @@ Route::delete('cities/{city}', 'CityController@delete');
 
 Route::get('users', 'UserController@index');
 Route::get('users/{user}', 'UserController@show');
-Route::put('users/update/{user}', 'UserController@update');
-Route::delete('users/delete/{user}', 'UserController@delete');
-Route::put('users/status/{user}', 'UserController@status');
+Route::put('users/{user}/update', 'UserController@update');
+Route::delete('users/{user}/delete', 'UserController@delete');
