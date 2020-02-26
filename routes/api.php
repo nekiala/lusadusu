@@ -35,3 +35,9 @@ Route::get('genders/{gender}', 'GenderController@show');
 Route::post('genders', 'GenderController@store');
 Route::put('genders/{gender}', 'GenderController@update');
 Route::delete('genders/{gender}', 'GenderController@delete');
+
+Route::get('cities', 'CityController@index');
+Route::get('cities/{city}', 'CityController@show');
+Route::post('cities', 'CityController@store');
+Route::put('cities/{city}', 'CityController@update');
+Route::delete('cities/{city}', 'CityController@delete');
