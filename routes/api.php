@@ -46,6 +46,12 @@ Route::post('cities', 'CityController@store');
 Route::put('cities/{city}', 'CityController@update');
 Route::delete('cities/{city}', 'CityController@delete');
 
+Route::get('categories', 'CategoryController@index');
+Route::get('categories/{category}', 'CategoryController@show');
+Route::post('categories', 'CategoryController@store');
+Route::put('categories/{category}', 'CategoryController@update');
+Route::delete('categories/{category}', 'CategoryController@delete');
+
 Route::get('users', 'UserController@index');
 Route::get('users/{user}', 'UserController@show');
 Route::put('users/{user}/update', 'UserController@update');
