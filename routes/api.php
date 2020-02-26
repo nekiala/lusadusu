@@ -46,19 +46,32 @@ Route::post('cities', 'CityController@store');
 Route::put('cities/{city}', 'CityController@update');
 Route::delete('cities/{city}', 'CityController@delete');
 
+Route::get('users', 'UserController@index');
+Route::get('users/{user}', 'UserController@show');
+Route::put('users/{user}/update', 'UserController@update');
+Route::delete('users/{user}/delete', 'UserController@delete');
+
 Route::get('categories', 'CategoryController@index');
 Route::get('categories/{category}', 'CategoryController@show');
 Route::post('categories', 'CategoryController@store');
 Route::put('categories/{category}', 'CategoryController@update');
 Route::delete('categories/{category}', 'CategoryController@delete');
 
-Route::get('users', 'UserController@index');
-Route::get('users/{user}', 'UserController@show');
-Route::put('users/{user}/update', 'UserController@update');
-Route::delete('users/{user}/delete', 'UserController@delete');
-
 Route::get('questions', 'QuestionController@index');
-Route::get('questions/{city}', 'QuestionController@show');
+Route::get('questions/{question}', 'QuestionController@show');
+Route::get('questions/{question}/discussion', 'QuestionController@discussion');
 Route::post('questions', 'QuestionController@store');
 Route::put('questions/{question}', 'QuestionController@update');
 Route::delete('questions/{question}', 'QuestionController@delete');
+
+Route::get('questions', 'QuestionController@index');
+Route::get('questions/{question}', 'QuestionController@show');
+Route::post('questions', 'QuestionController@store');
+Route::put('questions/{question}', 'QuestionController@update');
+Route::delete('questions/{question}', 'QuestionController@delete');
+
+Route::get('discussions', 'DiscussionController@index');
+Route::get('discussions/{discussion}', 'DiscussionController@show');
+Route::post('discussions', 'DiscussionController@store');
+Route::put('discussions/{discussion}', 'DiscussionController@update');
+Route::delete('discussions/{discussion}', 'DiscussionController@delete');

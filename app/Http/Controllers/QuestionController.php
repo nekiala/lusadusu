@@ -19,6 +19,11 @@ class QuestionController extends Controller
         return $question;
     }
 
+    public function discussion(Question $question)
+    {
+        return $question;
+    }
+
     public function store(Request $request)
     {
         $question =  Question::create($request->all());
