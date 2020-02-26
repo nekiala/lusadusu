@@ -56,3 +56,9 @@ Route::get('users', 'UserController@index');
 Route::get('users/{user}', 'UserController@show');
 Route::put('users/{user}/update', 'UserController@update');
 Route::delete('users/{user}/delete', 'UserController@delete');
+
+Route::get('questions', 'QuestionController@index');
+Route::get('questions/{city}', 'QuestionController@show');
+Route::post('questions', 'QuestionController@store');
+Route::put('questions/{question}', 'QuestionController@update');
+Route::delete('questions/{question}', 'QuestionController@delete');
