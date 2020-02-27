@@ -19,9 +19,9 @@ class LessonController extends Controller
         return $lesson;
     }
 
-    public function discussion(Lesson $lesson)
+    public function quizzes(Lesson $lesson)
     {
-        return $lesson;
+        return response()->json($lesson->quizzes()->get(), 201);
     }
 
     public function store(Request $request)
@@ -38,7 +38,7 @@ class LessonController extends Controller
         return response()->json($lesson, 200);
     }
 
-    public function status(Request $request, Lesson $lesson)
+    public function change(Request $request, Lesson $lesson)
     {
         $lesson->update($request->all());
 

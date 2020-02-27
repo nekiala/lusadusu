@@ -38,7 +38,7 @@ class ModeController extends Controller
         return response()->json($mode, 200);
     }
 
-    public function status(Request $request, Mode $mode)
+    public function change(Request $request, Mode $mode)
     {
         $mode->update($request->all());
 

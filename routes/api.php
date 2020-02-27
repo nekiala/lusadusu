@@ -103,12 +103,21 @@ Route::get('lessons', 'LessonController@index');
 Route::get('lessons/{lesson}', 'LessonController@show');
 Route::post('lessons', 'LessonController@store');
 Route::put('lessons/{lesson}', 'LessonController@update');
-Route::patch('lessons/{lesson}', 'LessonController@status');
+Route::patch('lessons/{lesson}', 'LessonController@change');
 Route::delete('lessons/{lesson}', 'LessonController@delete');
+Route::get('lessons/{lesson}/quizzes', 'LessonController@quizzes');
 
 Route::get('modes', 'ModeController@index');
 Route::get('modes/{mode}', 'ModeController@show');
 Route::post('modes', 'ModeController@store');
 Route::put('modes/{mode}', 'ModeController@update');
-Route::patch('modes/{mode}', 'ModeController@status');
+Route::patch('modes/{mode}', 'ModeController@change');
 Route::delete('modes/{mode}', 'ModeController@delete');
+
+Route::get('quizzes', 'QuizController@index');
+Route::get('quizzes/{quiz}', 'QuizController@show');
+Route::post('quizzes', 'QuizController@store');
+Route::put('quizzes/{quiz}', 'QuizController@update');
+Route::patch('quizzes/{quiz}', 'QuizController@change');
+Route::delete('quizzes/{quiz}', 'QuizController@delete');
+Route::get('quizzes/{quiz}/responses', 'QuizController@responses');
