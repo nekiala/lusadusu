@@ -12,4 +12,9 @@ class Quiz extends Model
     {
         return $this->belongsTo(Lesson::class);
     }
+
+    public function assertions()
+    {
+        return $this->hasMany(Assertion::class);
+    }
 }

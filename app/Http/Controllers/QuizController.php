@@ -19,9 +19,9 @@ class QuizController extends Controller
         return $quiz;
     }
 
-    public function responses(Quiz $quiz)
+    public function assertions(Quiz $quiz)
     {
-        return response()->json($quiz->responses()->get(), 201);
+        return response()->json($quiz->assertions()->get(), 201);
     }
 
     public function store(Request $request)

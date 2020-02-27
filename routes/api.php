@@ -120,4 +120,11 @@ Route::post('quizzes', 'QuizController@store');
 Route::put('quizzes/{quiz}', 'QuizController@update');
 Route::patch('quizzes/{quiz}', 'QuizController@change');
 Route::delete('quizzes/{quiz}', 'QuizController@delete');
-Route::get('quizzes/{quiz}/responses', 'QuizController@responses');
+Route::get('quizzes/{quiz}/assertions', 'QuizController@assertions');
+
+Route::get('assertions', 'AssertionController@index');
+Route::get('assertions/{assertion}', 'AssertionController@show');
+Route::post('assertions', 'AssertionController@store');
+Route::put('assertions/{assertion}', 'AssertionController@update');
+Route::patch('assertions/{assertion}', 'AssertionController@change');
+Route::delete('assertions/{assertion}', 'AssertionController@delete');
