@@ -15,7 +15,15 @@ class CreateLessonsTable extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('course_id');
+            $table->string('title');
+            $table->text('description')->nullable()->default(null);
+            $table->string('link')->unique();
+            $table->boolean('status')->default(true);
             $table->timestamps();
+
+            $table->foreign('course_id')->references('id')->on('courses')
+                ->onDelete('restrict');
         });
     }
 
