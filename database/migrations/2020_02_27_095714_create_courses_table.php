@@ -15,7 +15,15 @@ class CreateCoursesTable extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('material_id');
+            $table->string('title');
+            $table->text('description');
+            $table->tinyInteger('mode')->default(1);
+            $table->boolean('status')->default(true);
             $table->timestamps();
+
+            $table->foreign('material_id')->references('id')->on('materials')
+                ->onDelete('restrict');
         });
     }
 
