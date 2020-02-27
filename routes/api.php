@@ -77,6 +77,13 @@ Route::post('discussions', 'DiscussionController@store');
 Route::put('discussions/{discussion}', 'DiscussionController@update');
 Route::delete('discussions/{discussion}', 'DiscussionController@delete');
 
+Route::get('materials', 'MaterialController@index');
+Route::get('materials/{material}', 'MaterialController@show');
+Route::post('materials', 'MaterialController@store');
+Route::put('materials/{material}', 'MaterialController@update');
+Route::patch('materials/{material}', 'MaterialController@status');
+Route::delete('materials/{material}', 'MaterialController@delete');
+
 Route::get('profiles', 'ProfileController@index');
 Route::get('profiles/{profile}', 'ProfileController@show');
 Route::post('profiles', 'ProfileController@store');

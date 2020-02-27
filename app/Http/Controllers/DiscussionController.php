@@ -38,6 +38,13 @@ class DiscussionController extends Controller
         return response()->json($discussion, 200);
     }
 
+    public function status(Request $request, Discussion $discussion)
+    {
+        $discussion->update($request->all());
+
+        return response()->json($discussion, 200);
+    }
+
     public function delete(Discussion $discussion)
     {
         $discussion->delete();
