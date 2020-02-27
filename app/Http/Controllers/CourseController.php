@@ -19,6 +19,11 @@ class CourseController extends Controller
         return $course;
     }
 
+    public function lessons(Course $course)
+    {
+        return response()->json($course->lessons(), 200);
+    }
+
     public function discussion(Course $course)
     {
         return $course;

@@ -14,6 +14,11 @@ class MaterialController extends Controller
         return response()->json($materials, 200);
     }
 
+    public function courses(Material $material)
+    {
+        return response()->json($material->courses()->get(), 200);
+    }
+
     public function show(Material $material)
     {
         return $material;

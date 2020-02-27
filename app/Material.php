@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Material extends Model
 {
     protected $fillable = ['name', 'description', 'status'];
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }

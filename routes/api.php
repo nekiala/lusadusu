@@ -77,15 +77,24 @@ Route::post('discussions', 'DiscussionController@store');
 Route::put('discussions/{discussion}', 'DiscussionController@update');
 Route::delete('discussions/{discussion}', 'DiscussionController@delete');
 
+Route::get('profiles', 'ProfileController@index');
+Route::get('profiles/{profile}', 'ProfileController@show');
+Route::post('profiles', 'ProfileController@store');
+Route::put('profiles/{profile}', 'ProfileController@update');
+Route::delete('profiles/{profile}', 'ProfileController@delete');
+
 Route::get('materials', 'MaterialController@index');
 Route::get('materials/{material}', 'MaterialController@show');
 Route::post('materials', 'MaterialController@store');
 Route::put('materials/{material}', 'MaterialController@update');
 Route::patch('materials/{material}', 'MaterialController@status');
 Route::delete('materials/{material}', 'MaterialController@delete');
+Route::get('materials/{material}/courses', 'MaterialController@courses');
 
-Route::get('profiles', 'ProfileController@index');
-Route::get('profiles/{profile}', 'ProfileController@show');
-Route::post('profiles', 'ProfileController@store');
-Route::put('profiles/{profile}', 'ProfileController@update');
-Route::delete('profiles/{profile}', 'ProfileController@delete');
+Route::get('courses', 'CourseController@index');
+Route::get('courses/{course}', 'CourseController@show');
+Route::post('courses', 'CourseController@store');
+Route::put('courses/{course}', 'CourseController@update');
+Route::patch('courses/{course}', 'CourseController@status');
+Route::delete('courses/{course}', 'CourseController@delete');
+Route::get('courses/{course}/lessons', 'CourseController@lessons');
