@@ -12,4 +12,9 @@ class Material extends Model
     {
         return $this->hasMany(Course::class);
     }
+
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
 }

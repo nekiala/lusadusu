@@ -14,6 +14,32 @@ class MaterialController extends Controller
         return response()->json($materials, 200);
     }
 
+    /**
+     * List all the materials with different courses
+     * The mobile app uses this app to synchronize
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listWithCourses()
+    {
+        $materials = [];
+
+        foreach (Material::status(1)->get(['id', 'name']) as $material) {
+
+            $materials[] = [
+                "id" => $material->id,
+                "name" => $material->name,
+                "courses" => $material->courses()->count()
+            ];
+        }
+
+        return response()->json($materials, 200);
+    }
+
+    /**
+     * This method returns all the courses contained to this material
+     * @param Material $material
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function courses(Material $material)
     {
         return response()->json($material->courses()->get(), 200);

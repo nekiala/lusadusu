@@ -84,6 +84,7 @@ Route::put('profiles/{profile}', 'ProfileController@update');
 Route::delete('profiles/{profile}', 'ProfileController@delete');
 
 Route::get('materials', 'MaterialController@index');
+Route::get('materials/courses', 'MaterialController@listWithCourses');
 Route::get('materials/{material}', 'MaterialController@show');
 Route::post('materials', 'MaterialController@store');
 Route::put('materials/{material}', 'MaterialController@update');
