@@ -98,3 +98,10 @@ Route::put('courses/{course}', 'CourseController@update');
 Route::patch('courses/{course}', 'CourseController@status');
 Route::delete('courses/{course}', 'CourseController@delete');
 Route::get('courses/{course}/lessons', 'CourseController@lessons');
+
+Route::get('lessons', 'LessonController@index');
+Route::get('lessons/{lesson}', 'LessonController@show');
+Route::post('lessons', 'LessonController@store');
+Route::put('lessons/{lesson}', 'LessonController@update');
+Route::patch('lessons/{lesson}', 'LessonController@status');
+Route::delete('lessons/{lesson}', 'LessonController@delete');
