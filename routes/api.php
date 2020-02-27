@@ -128,3 +128,10 @@ Route::post('assertions', 'AssertionController@store');
 Route::put('assertions/{assertion}', 'AssertionController@update');
 Route::patch('assertions/{assertion}', 'AssertionController@change');
 Route::delete('assertions/{assertion}', 'AssertionController@delete');
+
+Route::get('exams', 'ExamController@index');
+Route::get('exams/{exam}', 'ExamController@show');
+Route::post('exams', 'ExamController@store');
+Route::put('exams/{exam}', 'ExamController@update');
+Route::patch('exams/{exam}', 'ExamController@change');
+Route::delete('exams/{exam}', 'ExamController@delete');
