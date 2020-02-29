@@ -16,8 +16,18 @@ class Lesson extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function exams()
+    {
+        return $this->hasMany(Exam::class);
+    }
+
     public function quizzes()
     {
         return $this->hasMany(Quiz::class);
+    }
+
+    public function scopeRandLesson($query, $course_id)
+    {
+        return $query->where('status', 1)->where('course_id', $course_id)->inRandomOrder()->first();
     }
 }

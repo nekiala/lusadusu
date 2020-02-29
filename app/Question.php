@@ -17,4 +17,14 @@ class Question extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function scopeUserLastQuestions($query, $user_id, $limit)
+    {
+        return $query->where('user_id', $user_id)->limit($limit);
+    }
+
+    public function scopeQuestionCountByUser($query, $category_id, $user_id)
+    {
+        return $query->where(['category_id' => $category_id, 'user_id' => $user_id])->count();
+    }
 }

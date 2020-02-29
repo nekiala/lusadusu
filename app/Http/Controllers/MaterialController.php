@@ -28,7 +28,7 @@ class MaterialController extends Controller
             $materials[] = [
                 "id" => $material->id,
                 "name" => $material->name,
-                "courses" => $material->courses()->count()
+                "courses" => $material->courses()->where('status', 1)->count()
             ];
         }
 

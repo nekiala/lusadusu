@@ -4,14 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class PaymentMethod extends Model
 {
-    protected $fillable = ['name', 'status'];
-
-    public function questions()
-    {
-        return $this->hasMany(Question::class);
-    }
+    protected $fillable = ['prefix', 'name', 'status'];
 
     public function scopeStatus($query, $status)
     {

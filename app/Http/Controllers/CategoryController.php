@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Question;
+use App\User;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -10,6 +12,23 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
+
+        return response()->json($categories, 200);
+    }
+
+    public function active(User $user)
+    {
+        //$categories = Category::status(1)->select('id', 'name');
+        $categories = [];
+
+        foreach (Category::status(1)->select('id', 'name')->get()  as $category) {
+
+            $categories[] = [
+                'id' => $category->id,
+                'name' => $category->name,
+                'tickets' => Question::questionCountByUser($category->id, $user->id)
+            ];
+        }
 
         return response()->json($categories, 200);
     }

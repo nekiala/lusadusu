@@ -13,11 +13,11 @@ class CoursesTableSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        for ($i = 0; $i < 3; $i ++) {
+        for ($i = 0; $i < 5; $i ++) {
 
             \App\Course::create([
                 'title' => $faker->unique()->city,
-                'material_id' => 1,
+                'material_id' => 3,
                 'description' => $faker->realText(150)
             ]);
         }

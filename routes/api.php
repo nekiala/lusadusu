@@ -53,12 +53,14 @@ Route::delete('users/{user}/delete', 'UserController@delete');
 Route::get('users/{user}/profile', 'UserController@profile');
 
 Route::get('categories', 'CategoryController@index');
+Route::get('categories/active/{user}', 'CategoryController@active');
 Route::get('categories/{category}', 'CategoryController@show');
 Route::post('categories', 'CategoryController@store');
 Route::put('categories/{category}', 'CategoryController@update');
 Route::delete('categories/{category}', 'CategoryController@delete');
 
 Route::get('questions', 'QuestionController@index');
+Route::get('questions/latest/{user}', 'QuestionController@latest');
 Route::get('questions/{question}', 'QuestionController@show');
 Route::get('questions/{question}/discussion', 'QuestionController@discussion');
 Route::post('questions', 'QuestionController@store');
@@ -131,8 +133,27 @@ Route::patch('assertions/{assertion}', 'AssertionController@change');
 Route::delete('assertions/{assertion}', 'AssertionController@delete');
 
 Route::get('exams', 'ExamController@index');
+Route::put('exams/prepare', 'ExamController@prepare');
 Route::get('exams/{exam}', 'ExamController@show');
 Route::post('exams', 'ExamController@store');
 Route::put('exams/{exam}', 'ExamController@update');
 Route::patch('exams/{exam}', 'ExamController@change');
 Route::delete('exams/{exam}', 'ExamController@delete');
+Route::patch('exams/{exam}/start', 'ExamController@start');
+
+// payment methods
+Route::get('methods', 'PaymentMethodController@index');
+Route::get('methods/active', 'PaymentMethodController@active');
+Route::get('methods/{method}', 'PaymentMethodController@show');
+Route::post('methods', 'PaymentMethodController@store');
+Route::put('methods/{method}', 'PaymentMethodController@update');
+Route::patch('methods/{method}', 'PaymentMethodController@change');
+Route::delete('methods/{method}', 'PaymentMethodController@delete');
+
+Route::get('payments', 'PaymentController@index');
+Route::put('payments/check', 'PaymentController@check');
+Route::get('payments/{payment}', 'PaymentController@show');
+Route::post('payments', 'PaymentController@store');
+Route::put('payments/{payment}', 'PaymentController@update');
+Route::patch('payments/{payment}', 'PaymentController@change');
+Route::delete('payments/{payment}', 'PaymentController@delete');

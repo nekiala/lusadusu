@@ -14,6 +14,13 @@ class QuestionController extends Controller
         return response()->json($questions, 200);
     }
 
+    public function latest($user_id)
+    {
+        $questions = Question::userLastQuestions($user_id, 2);
+
+        return response()->json($questions, 200);
+    }
+
     public function show(Question $question)
     {
         return $question;
