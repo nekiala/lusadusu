@@ -16,9 +16,23 @@ class QuestionController extends Controller
 
     public function latest($user_id)
     {
-        $questions = Question::userLastQuestions($user_id, 2);
+        $outputs = [];
+        $questions = Question::userLastQuestions($user_id, 1)->select('id', 'category_id', 'subject', 'description', 'status', 'created_at')->get();
 
-        return response()->json($questions, 200);
+        foreach ($questions as $question) {
+
+            $outputs[] = [
+                'id' => $question->id,
+                'name' => $question->subject,
+                'category_name' => $question->category()->select('name')->first()->name,
+                'discussions' => $question->discussions()->count(),
+                'status' => $question->status,
+                'date' => $question->created_at,
+                'description' => substr_replace($question->description, '...', 122)
+            ];
+        }
+
+        return response()->json($outputs, 200);
     }
 
     public function show(Question $question)
