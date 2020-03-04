@@ -16,7 +16,7 @@ class CategoryController extends Controller
         return response()->json($categories, 200);
     }
 
-    public function active(User $user)
+    public function user(User $user)
     {
         //$categories = Category::status(1)->select('id', 'name');
         $categories = [];
@@ -29,6 +29,13 @@ class CategoryController extends Controller
                 'tickets' => Question::questionCountByUser($category->id, $user->id)
             ];
         }
+
+        return response()->json($categories, 200);
+    }
+
+    public function active()
+    {
+        $categories = Category::where('status', 1)->get();
 
         return response()->json($categories, 200);
     }

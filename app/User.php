@@ -55,4 +55,9 @@ class User extends Authenticatable
 
         return $this->api_token;
     }
+
+    public function discussions()
+    {
+        return $this->hasMany(Discussion::class);
+    }
 }

@@ -14,10 +14,10 @@ class QuestionController extends Controller
         return response()->json($questions, 200);
     }
 
-    public function latest($user_id)
+    public function latest($user_id, $limit)
     {
         $outputs = [];
-        $questions = Question::userLastQuestions($user_id, 1)->select('id', 'category_id', 'subject', 'description', 'status', 'created_at')->get();
+        $questions = Question::userLastQuestions($user_id, $limit)->select('id', 'user_id', 'category_id', 'subject', 'description', 'status', 'created_at')->get();
 
         foreach ($questions as $question) {
 
@@ -28,7 +28,9 @@ class QuestionController extends Controller
                 'discussions' => $question->discussions()->count(),
                 'status' => $question->status,
                 'date' => $question->created_at,
-                'description' => substr_replace($question->description, '...', 122)
+                'cover' => substr_replace($question->description, '...', 122),
+                'description' => $question->description,
+                'user_id' => $question->user_id,
             ];
         }
 
@@ -42,7 +44,26 @@ class QuestionController extends Controller
 
     public function discussion(Question $question)
     {
-        return $question->discussions()->get();
+        $discussions = $question->discussions()->get();
+
+        if (!$discussions) {
+
+            return response()->json([], 204);
+        }
+
+        $items = [];
+
+        foreach ($discussions as $discussion) {
+
+            $items[] = [
+                'id' => intval($discussion->id),
+                'owner' => $discussion->user()->first()->name,
+                'message' => $discussion->message,
+                'date' => $discussion->created_at,
+            ];
+        }
+
+        return response()->json($items, 200);
     }
 
     public function store(Request $request)
@@ -64,5 +85,12 @@ class QuestionController extends Controller
         $question->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function status(Request $request, Question $question)
+    {
+        $question->update($request->all());
+
+        return response()->json($question, 200);
     }
 }

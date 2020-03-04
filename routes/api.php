@@ -53,25 +53,21 @@ Route::delete('users/{user}/delete', 'UserController@delete');
 Route::get('users/{user}/profile', 'UserController@profile');
 
 Route::get('categories', 'CategoryController@index');
-Route::get('categories/active/{user}', 'CategoryController@active');
+Route::get('categories/active/{user}', 'CategoryController@user');
+Route::get('categories/active', 'CategoryController@active');
 Route::get('categories/{category}', 'CategoryController@show');
 Route::post('categories', 'CategoryController@store');
 Route::put('categories/{category}', 'CategoryController@update');
 Route::delete('categories/{category}', 'CategoryController@delete');
 
 Route::get('questions', 'QuestionController@index');
-Route::get('questions/latest/{user}', 'QuestionController@latest');
+Route::get('questions/latest/{user}/{limit}', 'QuestionController@latest');
 Route::get('questions/{question}', 'QuestionController@show');
 Route::get('questions/{question}/discussion', 'QuestionController@discussion');
 Route::post('questions', 'QuestionController@store');
 Route::put('questions/{question}', 'QuestionController@update');
 Route::delete('questions/{question}', 'QuestionController@delete');
-
-Route::get('questions', 'QuestionController@index');
-Route::get('questions/{question}', 'QuestionController@show');
-Route::post('questions', 'QuestionController@store');
-Route::put('questions/{question}', 'QuestionController@update');
-Route::delete('questions/{question}', 'QuestionController@delete');
+Route::patch('questions/{question}', 'QuestionController@status');
 
 Route::get('discussions', 'DiscussionController@index');
 Route::get('discussions/{discussion}', 'DiscussionController@show');
@@ -152,6 +148,7 @@ Route::delete('methods/{method}', 'PaymentMethodController@delete');
 
 Route::get('payments', 'PaymentController@index');
 Route::put('payments/check', 'PaymentController@check');
+Route::put('payments/verify', 'PaymentController@verify');
 Route::get('payments/{payment}', 'PaymentController@show');
 Route::post('payments', 'PaymentController@store');
 Route::put('payments/{payment}', 'PaymentController@update');

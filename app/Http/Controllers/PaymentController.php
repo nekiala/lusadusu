@@ -44,12 +44,40 @@ class PaymentController extends Controller
         // return a 404 status
         if (!$payment->status) {
 
-            return response()->json(null, 404);
+            return response()->json(null, 402);
         }
 
         // there is a payment for this course
 
         return response()->json(null, 200);
+    }
+
+    /**
+     * Check for a payment
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verify(Request $request)
+    {
+        $user_id = intval($request->get('user_id'));
+        $course_id = intval($request->get('course_id'));
+        $transaction_code = strval($request->get('transaction_code'));
+
+        // check if there is a payment
+        $payment = Payment::where([
+            'user_id' => $user_id, 'course_id' => $course_id, 'transaction_code' => $transaction_code
+        ])->first();
+
+        // if there isn't a payment for this course
+        // return a 404 status
+        if (!$payment) {
+
+            return response()->json(null, 402);
+        }
+
+        // there is a payment for this course
+
+        return response()->json(null, 202);
     }
 
     public function store(Request $request)

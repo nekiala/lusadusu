@@ -20,7 +20,7 @@ class Question extends Model
 
     public function scopeUserLastQuestions($query, $user_id, $limit)
     {
-        return $query->where('user_id', $user_id)->limit($limit);
+        return $query->where('user_id', $user_id)->orderBy('id', 'desc')->limit($limit);
     }
 
     public function scopeQuestionCountByUser($query, $category_id, $user_id)
