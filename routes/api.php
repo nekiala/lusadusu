@@ -154,3 +154,9 @@ Route::post('payments', 'PaymentController@store');
 Route::put('payments/{payment}', 'PaymentController@update');
 Route::patch('payments/{payment}', 'PaymentController@change');
 Route::delete('payments/{payment}', 'PaymentController@delete');
+
+Route::get('balances/user/{id}', 'BalanceController@user');
+Route::resource('/balances', 'BalanceController');
+
+Route::get('commissions/user/{id}', 'CommissionController@user');
+Route::resource('/commissions', 'CommissionController');

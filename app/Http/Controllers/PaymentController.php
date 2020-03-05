@@ -76,8 +76,15 @@ class PaymentController extends Controller
         }
 
         // there is a payment for this course
+        // get exam details
+        $exam = Exam::where([
+            'user_id' => $user_id, 'course_id' => $course_id
+        ])->first();
 
-        return response()->json(null, 202);
+        return response()->json([
+            "lecture_mode" => $payment->lecture_mode,
+            "lesson_id" => intval($exam->lesson_id)
+        ], 202);
     }
 
     public function store(Request $request)

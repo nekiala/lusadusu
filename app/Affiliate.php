@@ -10,6 +10,7 @@ class Affiliate extends Model
         'affiliate_parameter_id',
         'user_id',
         'status',
+        'code',
         'comments'
     ];
 

@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $courses = Course::all();
