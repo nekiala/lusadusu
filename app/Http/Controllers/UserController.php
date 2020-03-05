@@ -24,6 +24,13 @@ class UserController extends Controller
         return $user->profile()->get();
     }
 
+    public function affiliate($affiliate_code)
+    {
+        $affiliateUsers = User::where('affiliate_code', $affiliate_code)->get();
+
+        return response()->json($affiliateUsers, 200);
+    }
+
     public function update(Request $request, User $user)
     {
         $user->update($request->all());

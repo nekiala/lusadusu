@@ -15,7 +15,6 @@ class CreateAffiliatesTable extends Migration
     {
         Schema::create('affiliates', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('affiliate_parameter_id');
             $table->unsignedBigInteger('user_id')->unique();
             $table->boolean('status')->default(false);
             $table->text('comments')->nullable()->default(null);

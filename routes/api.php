@@ -28,12 +28,6 @@ Route::delete('affiliates/{affiliate}', 'AffiliateController@delete');
 Route::get('affiliates/{affiliate}/members', 'AffiliateController@members');
 Route::post('affiliates/member', 'AffiliateController@member');
 
-Route::get('parameters', 'AffiliateParameterController@index');
-Route::get('parameters/{parameter}', 'AffiliateParameterController@show');
-Route::post('parameters', 'AffiliateParameterController@store');
-Route::put('parameters/{parameter}', 'AffiliateParameterController@update');
-Route::delete('parameters/{parameter}', 'AffiliateParameterController@delete');
-
 Route::get('genders', 'GenderController@index');
 Route::get('genders/{gender}', 'GenderController@show');
 Route::post('genders', 'GenderController@store');
@@ -47,6 +41,7 @@ Route::put('cities/{city}', 'CityController@update');
 Route::delete('cities/{city}', 'CityController@delete');
 
 Route::get('users', 'UserController@index');
+Route::get('users/affiliate/{id}', 'UserController@affiliate');
 Route::get('users/{user}', 'UserController@show');
 Route::put('users/{user}/update', 'UserController@update');
 Route::delete('users/{user}/delete', 'UserController@delete');

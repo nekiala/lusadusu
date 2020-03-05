@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Affiliate;
 use App\AffiliateMember;
+use App\Http\Traits\CodeGeneratorTrait;
 use Illuminate\Http\Request;
 
 class AffiliateController extends Controller
 {
+    use CodeGeneratorTrait;
+
     public function index()
     {
         $affiliates = Affiliate::all();
@@ -36,7 +39,12 @@ class AffiliateController extends Controller
 
     public function store(Request $request)
     {
-        $affiliate =  Affiliate::create($request->all());
+        $code = sprintf("AF%s", $this->generateCode());
+
+        $affiliate =  Affiliate::create([
+            'user_id' => $request->get('user_id'),
+            'code' => $code
+        ]);
 
         return response()->json($affiliate, 201);
     }
