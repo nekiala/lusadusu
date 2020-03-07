@@ -20,6 +20,7 @@ class CreateExamsTable extends Migration
             $table->boolean('started')->default(false);
             $table->dateTime('started_at')->nullable()->default(null);
             $table->dateTime('finished_at')->nullable()->default(null);
+            $table->dateTime('duration')->nullable()->default(null);
             $table->boolean('normal_finish')->nullable()->default(null);
             $table->boolean('passed')->nullable()->default(null);
             $table->float('percentage_obtained')->nullable()->default(null);

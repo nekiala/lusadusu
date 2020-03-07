@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
+use App\Assertion;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
@@ -21,9 +22,24 @@ class AnswerController extends Controller
 
     public function store(Request $request)
     {
-        $answer =  Answer::create($request->all());
+        // extract request parameters
+        $exam_id = intval($request->get('exam_id'));
+        $quiz_id = intval($request->get('quiz_id'));
+        $assertion_id = intval($request->get('assertion_id'));
 
-        return response()->json($answer, 201);
+        // check if the given answer is correct
+        $correct_answer = Assertion::find($assertion_id)->correct_answer;
+
+        Answer::create([
+            'exam_id' => $exam_id,
+            'quiz_id' => $quiz_id,
+            'assertion_id' => $assertion_id,
+            'correct_answer' => $correct_answer
+        ]);
+
+        return (new QuizController())->get($request);
+
+        //return redirect()->action('QuizController@get')->with(['exam_id' => $exam_id]);
     }
 
     public function update(Request $request, Answer $answer)

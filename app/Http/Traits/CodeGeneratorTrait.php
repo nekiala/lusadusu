@@ -5,18 +5,33 @@ namespace App\Http\Traits;
 
 
 use App\Affiliate;
+use App\Payment;
 
 trait CodeGeneratorTrait
 {
-    protected function generateCode()
+    protected function generateCode($len = 8)
     {
         if ($lastTr = Affiliate::latest('code')->whereNotNull('code')->first()) {
 
-            $code = $this->transactionCodeGenerator(substr($lastTr->code, 2), 8);
+            $code = $this->transactionCodeGenerator(substr($lastTr->code, 2), $len);
 
         } else {
 
-            $code = $this->transactionCodeGenerator(null, 8);
+            $code = $this->transactionCodeGenerator(null, $len);
+        }
+
+        return $code;
+    }
+
+    protected function generatePaymentCode($len = 8)
+    {
+        if ($lastTr = Payment::latest('transaction_code')->whereNotNull('transaction_code')->first()) {
+
+            $code = $this->transactionCodeGenerator(substr($lastTr->transaction_code, 3), $len);
+
+        } else {
+
+            $code = $this->transactionCodeGenerator(null, $len);
         }
 
         return $code;

@@ -1,9 +1,10 @@
 <?php
 
+use App\ExamParameter;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 
-class DiscussionsTableSeeder extends Seeder
+class ExamParametersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,10 +17,8 @@ class DiscussionsTableSeeder extends Seeder
 
         for ($i = 0; $i < 6; $i ++) {
 
-            \App\Discussion::create([
-                'question_id' => 1,
-                'user_id' => 1,
-                'message' => $faker->unique()->realText($faker->randomNumber(2)),
+            ExamParameter::create([
+                'duration' => $faker->numberBetween(3, 5)
             ]);
         }
     }

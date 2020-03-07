@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
 use App\Material;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,11 @@ class MaterialController extends Controller
     public function courses(Material $material)
     {
         return response()->json($material->courses()->get(), 200);
+    }
+
+    public function userCourses(Material $material, $user_id)
+    {
+        return response()->json(Course::userCourses($material->id, $user_id)->get(), 200);
     }
 
     public function show(Material $material)

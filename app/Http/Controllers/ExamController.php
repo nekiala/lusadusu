@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Assertion;
 use App\Exam;
+use App\ExamParameter;
+use App\Http\Traits\ScoreCalculatorTrait;
 use App\Lesson;
 use App\Mode;
+use App\Question;
+use App\Quiz;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
+    use ScoreCalculatorTrait;
+
     public function index()
     {
         $exams = Exam::all();
@@ -104,10 +111,73 @@ class ExamController extends Controller
         if ($exam->started)
             return response()->json($exam, 201);
 
-        $exam->started = true;
-        $exam->started_at = date('Y-m-d H:i:s');
-        $exam->save();
+        // get quizzes count
+        $quizzes = Quiz::where(['lesson_id' => $exam->lesson_id, 'status' => 1])->count();
+
+        // get a random quiz from not already asked quiz list
+        $randomQuiz = Quiz::notAsked($exam->id)->inRandomOrder()->first();
+
+        // check if that quiz exists
+        // if yes, then get all the associated assertions
+        if ($randomQuiz) {
+
+            // step indicates how many question left to finish the exam
+            // we get this step by selecting available questions that
+            // are not already used by this user and are still active
+            $step = Quiz::alreadyAsked($exam->id)->count();
+
+            // the assertions must be active
+            $assertions = Assertion::where(['quiz_id' => $randomQuiz->id, 'status' => 1])->get();
+
+            // setup exam duration
+            // the user is supposed to finish his exam within that duration
+            $duration = ExamParameter::where('status', 1)->first()->duration;
+
+            $nowDate = new \DateTime('now');
+
+            $nowDate->modify(sprintf("+%d minutes", $duration));
+
+            // update exam info
+            $exam->started = true;
+            $exam->started_at = date('Y-m-d H:i:s');
+            $exam->duration = $nowDate->format('Y-m-d H:i:s'); // duration for the exam to finish
+            $exam->save();
+
+            $response = [
+                'items' => $quizzes,
+                'quiz_id' => $randomQuiz->id,
+                'quiz_name' => $randomQuiz->question,
+                'step' => $step + 1,
+                'exam_duration' => $duration,
+                'exam_id' => $exam->id,
+                'assertions' => $assertions,
+                'in_seconds' => false // determines if times is already converted in seconds
+            ];
+
+            return response()->json($response, 200);
+        }
 
         return response()->json($exam, 201);
+    }
+
+    public function close(Exam $exam)
+    {
+
+        // close the exam
+        // and set score
+        $exam->finished_at = date('Y-m-d H:i:s');
+        $exam->normal_finish = true;
+        $exam->percentage_obtained = $this->getScore($exam);
+
+        $examPassed = $exam->percentage_obtained >= $exam->percentage_required;
+        $exam->passed = $examPassed;
+
+        // save the exam
+        $exam->save();
+
+        return response()->json([
+            'victory' => intval($examPassed),
+            'score' => strval($exam->percentage_obtained) . '%'
+        ], 201);
     }
 }

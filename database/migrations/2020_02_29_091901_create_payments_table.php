@@ -23,8 +23,6 @@ class CreatePaymentsTable extends Migration
             $table->boolean('status')->default(false);
             $table->timestamps();
 
-            $table->unique(['course_id', 'user_id']);
-
             $table->foreign('payment_method_id')->references('id')
                 ->on('payment_methods')->onDelete('restrict');
 

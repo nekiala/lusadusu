@@ -78,12 +78,14 @@ Route::delete('profiles/{profile}', 'ProfileController@delete');
 
 Route::get('materials', 'MaterialController@index');
 Route::get('materials/courses', 'MaterialController@listWithCourses');
+Route::get('materials/user', 'MaterialController@listWithCourses');
 Route::get('materials/{material}', 'MaterialController@show');
 Route::post('materials', 'MaterialController@store');
 Route::put('materials/{material}', 'MaterialController@update');
 Route::patch('materials/{material}', 'MaterialController@status');
 Route::delete('materials/{material}', 'MaterialController@delete');
 Route::get('materials/{material}/courses', 'MaterialController@courses');
+Route::get('materials/{material}/user/{id}', 'MaterialController@userCourses');
 
 Route::get('courses', 'CourseController@index');
 Route::get('courses/{course}', 'CourseController@show');
@@ -111,6 +113,7 @@ Route::delete('modes/{mode}', 'ModeController@delete');
 Route::get('quizzes', 'QuizController@index');
 Route::get('quizzes/{quiz}', 'QuizController@show');
 Route::post('quizzes', 'QuizController@store');
+Route::patch('quizzes/get', 'QuizController@get')->name('quizzes.get');
 Route::put('quizzes/{quiz}', 'QuizController@update');
 Route::patch('quizzes/{quiz}', 'QuizController@change');
 Route::delete('quizzes/{quiz}', 'QuizController@delete');
@@ -131,6 +134,7 @@ Route::put('exams/{exam}', 'ExamController@update');
 Route::patch('exams/{exam}', 'ExamController@change');
 Route::delete('exams/{exam}', 'ExamController@delete');
 Route::patch('exams/{exam}/start', 'ExamController@start');
+Route::put('exams/{exam}/close', 'ExamController@close');
 
 // payment methods
 Route::get('methods', 'PaymentMethodController@index');
@@ -149,9 +153,12 @@ Route::post('payments', 'PaymentController@store');
 Route::put('payments/{payment}', 'PaymentController@update');
 Route::patch('payments/{payment}', 'PaymentController@change');
 Route::delete('payments/{payment}', 'PaymentController@delete');
+Route::post('payments/gateway', 'PaymentController@gateway');
+Route::post('payments/callback/{trans}', 'PaymentController@callback');
 
 Route::get('balances/user/{id}', 'BalanceController@user');
 Route::resource('/balances', 'BalanceController');
 
 Route::get('commissions/user/{id}', 'CommissionController@user');
 Route::resource('/commissions', 'CommissionController');
+Route::resource('/answers', 'AnswerController');

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Course extends Model
 {
@@ -24,5 +25,26 @@ class Course extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * courses that the user has not passed exams
+     * @param $material_id
+     * @param $user_id
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public static function userCourses($material_id, $user_id)
+    {
+        return DB::table('courses as c')
+            ->where([
+                'c.status' => 1,
+                'c.material_id' => $material_id
+            ])
+            ->whereNotIn('id', DB::table('exams')
+                ->where([
+                    'user_id' => $user_id,
+                    'started' => 1
+                ])->pluck('course_id')
+            );
     }
 }
