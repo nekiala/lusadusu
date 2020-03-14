@@ -30,4 +30,9 @@ class Lesson extends Model
     {
         return $query->where('status', 1)->where('course_id', $course_id)->inRandomOrder()->first();
     }
+
+    public function scopeLessonName($query, $id) {
+
+        return $query->select('title')->where('id', $id)->first()->title;
+    }
 }

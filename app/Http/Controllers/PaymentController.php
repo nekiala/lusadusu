@@ -6,6 +6,7 @@ use App\Exam;
 use App\Http\Traits\CodeGeneratorTrait;
 use App\Payment;
 use App\PaymentMethod;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -27,7 +28,7 @@ class PaymentController extends Controller
     /**
      * Check for a payment
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function check(Request $request)
     {
@@ -61,7 +62,7 @@ class PaymentController extends Controller
     /**
      * Check for a payment
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function verify(Request $request)
     {
@@ -71,7 +72,8 @@ class PaymentController extends Controller
 
         // check if there is a payment
         $payment = Payment::where([
-            'user_id' => $user_id, 'course_id' => $course_id, 'transaction_code' => $transaction_code
+            'user_id' => $user_id, 'course_id' => $course_id, 'transaction_code' => $transaction_code,
+            'status' => 1
         ])->first();
 
         // if there isn't a payment for this course
@@ -81,15 +83,8 @@ class PaymentController extends Controller
             return response()->json(null, 402);
         }
 
-        // there is a payment for this course
-        // get exam details
-        $exam = Exam::where([
-            'user_id' => $user_id, 'course_id' => $course_id
-        ])->first();
-
         return response()->json([
-            "lecture_mode" => $payment->lecture_mode,
-            "exam_id" => intval($exam->id)
+            "lecture_mode" => $payment->lecture_mode
         ], 202);
     }
 
@@ -116,16 +111,20 @@ class PaymentController extends Controller
 
     public function delete(Payment $payment)
     {
-        $payment->delete();
+        try {
+
+            $payment->delete();
+
+        } catch (\Exception $e) {
+
+        }
 
         return response()->json(null, 204);
     }
 
     public function gateway(Request $request)
     {
-
-
-        // check for phone number prefix
+        // prepare request data
         $api_key = env('GATEWAY_API_KEY');
         $amount = strval($request->get('amount'));
         $currency = strval($request->get('currency'));
@@ -136,6 +135,8 @@ class PaymentController extends Controller
         $transaction_code = sprintf("P%d-%s", $user_id, $this->generatePaymentCode());
         $callback_url = sprintf(env('API_CALLBACK_URL'), $transaction_code);
 
+        $description = "Test Payment NTOPROG";
+
         $data = [
             'api_key' => $api_key,
             'endpoint' => $endpoint,
@@ -144,11 +145,15 @@ class PaymentController extends Controller
             'trans_code' => $transaction_code,
             'phone_number' => $phone_number,
             'transaction_type' => $transaction_type,
-            'description' => "Test Payment NTOPROG",
+            'description' => $description,
             'callback_url' => $callback_url
         ];
 
         $payload = http_build_query($data);
+
+        // for proxy need
+        $proxy_address = "10.80.1.1:90";
+        $proxy_auth = "kiala.o:Infoset1@";
 
         // Prepare new cURL resource
         $ch = curl_init('https://gateway.ntoprog.org/api/transactions');
@@ -157,8 +162,20 @@ class PaymentController extends Controller
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 
+        // setting up proxy
+        /*curl_setopt($ch, CURLOPT_PROXY, $proxy_address);
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_auth);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);*/
+
         // Submit the POST request
         $result = curl_exec($ch);
+
+        $error_message = null;
+
+        if (curl_errno($ch)) {
+
+            $error_message = curl_errno($ch);
+        }
 
         // Close cURL session handle
         curl_close($ch);
@@ -177,7 +194,8 @@ class PaymentController extends Controller
             return response()->json($result, 204);
         }
 
-        return response()->json($result, 202);
+
+        return response()->json($error_message, 202);
 
     }
 

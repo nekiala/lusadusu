@@ -25,6 +25,9 @@ class Question extends Model
 
     public function scopeQuestionCountByUser($query, $category_id, $user_id)
     {
-        return $query->where(['category_id' => $category_id, 'user_id' => $user_id])->orWhere('is_public', 1)->count();
+        return $query->where(['category_id' => $category_id, 'user_id' => $user_id])->orWhere([
+            'is_public' => 1,
+            'category_id' => $category_id
+        ])->count();
     }
 }

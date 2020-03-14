@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static where(string $string, string $endpoint)
+ */
 class PaymentMethod extends Model
 {
     protected $fillable = ['prefix', 'name', 'status'];

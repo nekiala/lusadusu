@@ -16,4 +16,19 @@ class Exam extends Model
     {
         return $this->belongsTo(Lesson::class);
     }
+
+    public function scopeFinished($query, $user_id)
+    {
+        return $query->where('user_id', $user_id)->whereNotNull('finished_at')->orderBy('id', 'DESC');
+    }
+
+    public function scopeUnstarted($query, $user_id)
+    {
+        return $query->where(['user_id' => $user_id, 'started' => 0])->orderBy('id', 'DESC');
+    }
+
+    public function scopeUnfinished($query, $user_id)
+    {
+        return $query->where('user_id', $user_id)->whereNull('finished_at')->orderBy('id', 'DESC');
+    }
 }

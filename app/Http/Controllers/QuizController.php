@@ -103,7 +103,7 @@ class QuizController extends Controller
             $quizzes = Quiz::where(['lesson_id' => $exam->lesson_id, 'status' => 1])->count();
 
             // get a random quiz from not already asked quiz list
-            $randomQuiz = Quiz::notAsked($exam->id)->inRandomOrder()->first();
+            $randomQuiz = Quiz::notAsked($exam->id, $exam->lesson_id)->inRandomOrder()->first();
 
             // check if that quiz exists
             // if yes, then get all the associated assertions

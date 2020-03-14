@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="110471ad-e28b-4522-98d4-533c69990f9a" name="ONET" url="http://cloud-7372228.onetsolutions.network">
+        <fileTransfer accessType="SFTP" host="185.163.126.107" port="22" sshConfig="root@185.163.126.107:22 (p)">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

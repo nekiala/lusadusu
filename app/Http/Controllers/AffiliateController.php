@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Affiliate;
 use App\AffiliateMember;
 use App\Http\Traits\CodeGeneratorTrait;
+use App\Http\Traits\NumberToShortStringTrait;
 use Illuminate\Http\Request;
 
 class AffiliateController extends Controller
@@ -39,11 +40,9 @@ class AffiliateController extends Controller
 
     public function store(Request $request)
     {
-        $code = sprintf("AF%s", $this->generateCode());
-
         $affiliate =  Affiliate::create([
             'user_id' => $request->get('user_id'),
-            'code' => $code
+            'code' => $this->generateAffiliateCode()
         ]);
 
         return response()->json($affiliate, 201);

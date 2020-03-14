@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Answer;
 use App\Assertion;
 use App\Exam;
 use App\ExamParameter;
@@ -10,6 +11,8 @@ use App\Lesson;
 use App\Mode;
 use App\Question;
 use App\Quiz;
+use App\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
@@ -75,7 +78,10 @@ class ExamController extends Controller
             // return the lesson
             if (!$exam->started) {
 
-                return response()->json($exam->lesson()->first(), 200);
+                $lesson = $exam->lesson()->first();
+                $lesson->exam_id = $exam->id;
+
+                return response()->json($lesson, 200);
             }
 
             // if the course has started, check if the session has not yet expired
@@ -89,6 +95,10 @@ class ExamController extends Controller
         }
 
         $lesson = Lesson::randLesson($course_id);
+
+        if (!isset($lesson->id))
+            return response()->json(null, 404);
+
         $mode = Mode::find($mode_id);
 
         $percentage_required = $mode->winning_average;
@@ -102,20 +112,27 @@ class ExamController extends Controller
 
         $exam->save();
 
+        // inject exam_id to lesson
+        $lesson->exam_id = $exam->id;
+
         return response()->json($lesson, 200);
     }
 
-    public function start(Exam $exam)
+    public function start(Request $request, Exam $exam)
     {
         // first check if exam has already started
-        if ($exam->started)
-            return response()->json($exam, 201);
+        if ($exam->started) {
+
+            return (new QuizController())->get($request->merge([
+                "exam_id" => $exam->id
+            ]));
+        }
 
         // get quizzes count
         $quizzes = Quiz::where(['lesson_id' => $exam->lesson_id, 'status' => 1])->count();
 
         // get a random quiz from not already asked quiz list
-        $randomQuiz = Quiz::notAsked($exam->id)->inRandomOrder()->first();
+        $randomQuiz = Quiz::notAsked($exam->id, $exam->lesson_id)->inRandomOrder()->first();
 
         // check if that quiz exists
         // if yes, then get all the associated assertions
@@ -179,5 +196,73 @@ class ExamController extends Controller
             'victory' => intval($examPassed),
             'score' => strval($exam->percentage_obtained) . '%'
         ], 201);
+    }
+
+    public function stats($user_id)
+    {
+        $total_exams = Exam::where('user_id', $user_id)->count();
+        $success = Exam::where(['user_id' => $user_id, 'passed' => 1])->count();
+        $fails = Exam::where(['user_id' => $user_id, 'passed' => 0])->count();
+
+        return response()->json([
+            'overall' => $total_exams,
+            'fails' => $fails,
+            'successes' => $success
+        ], 201);
+    }
+
+    /**
+     * This method returns the user's completed exams
+     * @param $user_id
+     * @param $status
+     * @return JsonResponse
+     */
+    public function completed($user_id, $status)
+    {
+        if ($status == 3) {
+
+            $finished = Exam::finished($user_id);
+
+        } elseif ($status == 2) {
+
+            $finished = Exam::unfinished($user_id);
+
+        } else {
+
+            $finished = Exam::unstarted($user_id);
+        }
+
+        // if there are exams
+        // then format the response
+        if ($finished->count()) {
+
+            $exams = $finished->get();
+            $output = [];
+
+            foreach ($exams as $exam) {
+
+                $exam_code = sprintf("%s.%s.%s", $exam->user_id, date('d'), $exam->id);
+
+                $output[] = [
+
+                    'id' => $exam->id,
+                    'code' => $exam_code,
+                    'lesson_name' => Lesson::lessonName($exam->lesson_id),
+                    'started_at' => $exam->started_at,
+                    'created_at' => $exam->created_at,
+                    'passed' => boolval($exam->passed),
+                    'can_visualize' => boolval($exam->can_visualize),
+                    'quiz_count' => 10,
+                    'course_id' => $exam->course_id,
+                    'percentage_required' => $exam->percentage_required,
+                    'percentage_obtained' => $exam->percentage_obtained
+                ];
+            }
+
+            return response()->json($output, 200);
+
+        }
+
+        return response()->json(null, 404);
     }
 }

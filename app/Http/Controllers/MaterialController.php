@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\Material;
+use App\User;
 use Illuminate\Http\Request;
 
 class MaterialController extends Controller
@@ -87,5 +88,12 @@ class MaterialController extends Controller
         $material->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function stats($user_id)
+    {
+        $stats = Material::stats($user_id);
+
+        return response()->json($stats, 200);
     }
 }

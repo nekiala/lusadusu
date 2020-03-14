@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static create(array $data)
+ */
 class Payment extends Model
 {
     protected $fillable = ['payment_method_id', 'user_id', 'course_id', 'lecture_mode', 'amount', 'transaction_code', 'status'];

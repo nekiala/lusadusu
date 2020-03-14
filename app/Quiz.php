@@ -19,9 +19,9 @@ class Quiz extends Model
         return $this->hasMany(Assertion::class);
     }
 
-    public function scopeNotAsked($query, $exam_id)
+    public function scopeNotAsked($query, $exam_id, $lesson_id)
     {
-        return $query->where('status', 1)
+        return $query->where(['status' => 1, 'lesson_id' => $lesson_id])
             ->whereNotIn('id', DB::table('answers')->where('exam_id', $exam_id)->pluck('quiz_id'));
     }
 

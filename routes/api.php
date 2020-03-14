@@ -86,6 +86,7 @@ Route::patch('materials/{material}', 'MaterialController@status');
 Route::delete('materials/{material}', 'MaterialController@delete');
 Route::get('materials/{material}/courses', 'MaterialController@courses');
 Route::get('materials/{material}/user/{id}', 'MaterialController@userCourses');
+Route::get('materials/stats/{id}', 'MaterialController@stats');
 
 Route::get('courses', 'CourseController@index');
 Route::get('courses/{course}', 'CourseController@show');
@@ -135,6 +136,8 @@ Route::patch('exams/{exam}', 'ExamController@change');
 Route::delete('exams/{exam}', 'ExamController@delete');
 Route::patch('exams/{exam}/start', 'ExamController@start');
 Route::put('exams/{exam}/close', 'ExamController@close');
+Route::get('exams/stats/{id}', 'ExamController@stats');
+Route::get('exams/completed/{id}/{code}', 'ExamController@completed');
 
 // payment methods
 Route::get('methods', 'PaymentMethodController@index');
@@ -162,3 +165,5 @@ Route::resource('/balances', 'BalanceController');
 Route::get('commissions/user/{id}', 'CommissionController@user');
 Route::resource('/commissions', 'CommissionController');
 Route::resource('/answers', 'AnswerController');
+
+Route::get('results/check/{code}', 'ResultController@check');

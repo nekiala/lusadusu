@@ -13,7 +13,8 @@
         "laravel/framework": "^6.2",
         "laravel/helpers": "^1.1",
         "laravel/tinker": "^2.0",
-      "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-bcmath": "*"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

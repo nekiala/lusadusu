@@ -9,7 +9,7 @@ $factory->define(Quiz::class, function (Faker $faker) {
     $types = ['normal', 'interactive'];
 
     return [
-        'lesson_id' => 9,
+        'lesson_id' => 29,
         'question' => $faker->unique()->paragraph,
         'type' => $types[rand(0, sizeof($types) - 1)]
     ];

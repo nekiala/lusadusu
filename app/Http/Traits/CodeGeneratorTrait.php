@@ -9,6 +9,8 @@ use App\Payment;
 
 trait CodeGeneratorTrait
 {
+    use NumberToShortStringTrait;
+
     protected function generateCode($len = 8)
     {
         if ($lastTr = Affiliate::latest('code')->whereNotNull('code')->first()) {
@@ -42,7 +44,7 @@ trait CodeGeneratorTrait
      * @param int $len
      * @return string|null
      */
-    protected function transactionCodeGenerator($actualCode = null, $len = 20):string
+    protected function transactionCodeGenerator($actualCode = null, $len = 20): ?string
     {
         // if there is no transaction code yet
         // then return a $len code with 1 at the then
@@ -122,5 +124,10 @@ trait CodeGeneratorTrait
         NTP_RETURN:
 
         return $actualCode;
+    }
+
+    protected function generateAffiliateCode():string
+    {
+        return $this->alphaID(sprintf("%s",strval(time())));
     }
 }
