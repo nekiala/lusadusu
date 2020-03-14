@@ -114,7 +114,10 @@ class BalanceController extends Controller
             return response()->json([
                 'affiliate_code' => $affiliate_code,
                 'affiliate_status' => $affiliate_status,
-            ], 404);
+                'victory_commission' => 0,
+                'participation_commission' => 0,
+                'members' => 0
+            ], 200);
         }
 
         $balance->affiliate_code = $affiliate_code;

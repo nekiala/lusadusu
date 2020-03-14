@@ -43,6 +43,7 @@ Route::delete('cities/{city}', 'CityController@delete');
 Route::get('users', 'UserController@index');
 Route::get('users/affiliate/{id}', 'UserController@affiliate');
 Route::get('users/{user}', 'UserController@show');
+Route::post('users', 'UserController@store');
 Route::put('users/{user}/update', 'UserController@update');
 Route::delete('users/{user}/delete', 'UserController@delete');
 Route::get('users/{user}/profile', 'UserController@profile');
