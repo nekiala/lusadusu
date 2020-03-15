@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\AffiliateMember;
+use App\Balance;
+use App\Commission;
 use App\Exam;
 use App\Http\Traits\CodeGeneratorTrait;
 use App\Payment;
@@ -206,6 +209,28 @@ class PaymentController extends Controller
         $payment->status = intval($request->get('code')) == 200 ? 1 : 0;
 
         $payment->save();
+
+        // if the payment is successful, then
+        // check for affiliation
+        // if the user is affiliated, give some points to hist up line
+        if ($affiliateMember = AffiliateMember::where('member_id', $payment->user_id)->first()) {
+
+            $user = $affiliateMember->affiliate->user;
+
+            // register commission
+            Commission::create([
+                'payment_id' => $payment->id,
+                'affiliate_code' => $user->affiliate_code,
+                'commission_type' => 1,
+                'amount' => $payment->amount * 0.01
+            ]);
+
+            // update balance also
+            $balance = Balance::where('user_id', $user->id)->first();
+
+            $balance->participation_commission += $payment->amount * 0.01;
+            $balance->save();
+        }
 
         return response()->json([
             'payment' => $payment,

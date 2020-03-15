@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Affiliate;
 use App\AffiliateMember;
+use App\Balance;
 use App\City;
 use App\Profile;
 use App\User;
@@ -65,12 +66,14 @@ class UserController extends Controller
             'female' => 2
         ];
 
+        // data sent from mobile app contains values and not Id
+        // Male or Female. So, we have to convert male or female to its equivalent to ids
         if (in_array(strtolower($user_gender ), array_keys($gendersArray))) {
 
             $user_gender = $gendersArray[strtolower($user_gender)];
         }
 
-        // register user
+        // prepare user data tobe registered to the database
         $user_data = [
             'name' => $user_name,
             'gender_id' => $user_gender,
@@ -78,15 +81,19 @@ class UserController extends Controller
             'password' => Hash::make($user_phone)
         ];
 
-        if (!$affiliate_code) {
+        $balance = null;
+        $affiliate = null;
+        $affiliateMember = null;
 
-            // if the affiliate code doesn't correspond to any
-            // existing data, return 404
+        if ($affiliate_code) {
+
+            // if the provided affiliate code doesn't correspond to any existing data, return 404
             if (!$affiliate = Affiliate::where('code', $affiliate_code)->first()) {
 
                 return response(null, 404);
             }
 
+            // else, add affiliate_code key to the user data
             $user_data['affiliate_code'] = $affiliate_code;
         }
 
@@ -94,11 +101,20 @@ class UserController extends Controller
 
             $user = User::create($user_data);
 
-            // if the user is created, then create an affiliate link
-            $affiliateMember = AffiliateMember::create([
-                'affiliate_id' => $affiliate->id,
-                'member_id' => $user->id
-            ]);
+            if (isset($user_data['affiliate_code'])) {
+
+                // if the user is created, then create an affiliate member record
+                $affiliateMember = AffiliateMember::create([
+                    'affiliate_id' => $affiliate->id,
+                    'member_id' => $user->id
+                ]);
+
+                // also update balance (members)
+                $balance = Balance::where('user_id', $affiliate->user_id)->first();
+
+                $balance->members += 1;
+                $balance->save();
+            }
 
         } catch (QueryException $exception) {
 
@@ -119,8 +135,9 @@ class UserController extends Controller
 
         } catch (QueryException $exception) {
 
-            // delete the affiliate member and user
+            // delete the affiliate member, balance and user records
             $affiliateMember->delete();
+            $balance->delete();
             $user->delete();
             return response()->json($exception->getMessage(), 409);
         }

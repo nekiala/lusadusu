@@ -18,4 +18,9 @@ class Affiliate extends Model
     {
         return $this->hasMany(AffiliateMember::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

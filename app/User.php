@@ -43,6 +43,11 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    public function affiliate()
+    {
+        return $this->hasOne(Affiliate::class);
+    }
+
     public function gender()
     {
         return $this->belongsTo(Gender::class);

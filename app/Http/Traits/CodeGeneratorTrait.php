@@ -29,7 +29,7 @@ trait CodeGeneratorTrait
     {
         if ($lastTr = Payment::latest('transaction_code')->whereNotNull('transaction_code')->first()) {
 
-            $code = $this->transactionCodeGenerator(substr($lastTr->transaction_code, 3), $len);
+            $code = $this->transactionCodeGenerator(substr($lastTr->transaction_code, strpos($lastTr->transaction_code, "-") + 1), $len);
 
         } else {
 
