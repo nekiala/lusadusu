@@ -7,10 +7,13 @@ use App\Balance;
 use App\Commission;
 use App\Exam;
 use App\Http\Traits\CodeGeneratorTrait;
+use App\Jobs\CalculateCommission;
+use App\Mail\PaymentCompletedMail;
 use App\Payment;
 use App\PaymentMethod;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -218,18 +221,31 @@ class PaymentController extends Controller
             $user = $affiliateMember->affiliate->user;
 
             // register commission
-            Commission::create([
+            /*Commission::create([
                 'payment_id' => $payment->id,
                 'affiliate_code' => $user->affiliate_code,
                 'commission_type' => 1,
                 'amount' => $payment->amount * 0.01
-            ]);
+            ]);*/
 
-            // update balance also
-            $balance = Balance::where('user_id', $user->id)->first();
+            if ($payment->status) {
 
-            $balance->participation_commission += $payment->amount * 0.01;
-            $balance->save();
+                // calculate commissions
+                CalculateCommission::dispatch([
+                    'user' => $user,
+                    'payment' => $payment
+                ])->delay(now()->addMinutes(1));
+
+                // update balance also
+                if ($balance = Balance::where('user_id', $user->id)->first()) {
+
+                    $balance->participation_commission += $payment->amount * 0.01;
+                    $balance->save();
+                }
+
+                // send email
+                Mail::to($payment->user)->queue(new PaymentCompletedMail($payment, $payment->user));
+            }
         }
 
         return response()->json([
@@ -237,5 +253,27 @@ class PaymentController extends Controller
             'code' => $request->get('code'),
             'message' => $request->get('message'),
         ], 201);
+    }
+
+    /**
+     * This method resend confirmation code to the user
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function mail(Request $request)
+    {
+        $user_id = intval($request->get('user_id'));
+        $course_id = intval($request->get('course_id'));
+
+        if ($payment = Payment::where(['course_id' => $course_id, 'user_id' => $user_id])->first()) {
+
+            // send email
+            Mail::to($payment->user)->queue(new PaymentCompletedMail($payment, $payment->user));
+
+            return response()->json(null, 204);
+
+        }
+
+        return response()->json(null, 404);
     }
 }

@@ -74,6 +74,8 @@ Route::delete('discussions/{discussion}', 'DiscussionController@delete');
 Route::get('profiles', 'ProfileController@index');
 Route::get('profiles/{profile}', 'ProfileController@show');
 Route::post('profiles', 'ProfileController@store');
+Route::patch('profiles', 'ProfileController@verify');
+Route::put('profiles/check', 'ProfileController@check');
 Route::put('profiles/{profile}', 'ProfileController@update');
 Route::delete('profiles/{profile}', 'ProfileController@delete');
 
@@ -152,6 +154,7 @@ Route::delete('methods/{method}', 'PaymentMethodController@delete');
 Route::get('payments', 'PaymentController@index');
 Route::put('payments/check', 'PaymentController@check');
 Route::put('payments/verify', 'PaymentController@verify');
+Route::put('payments/mail', 'PaymentController@mail');
 Route::get('payments/{payment}', 'PaymentController@show');
 Route::post('payments', 'PaymentController@store');
 Route::put('payments/{payment}', 'PaymentController@update');

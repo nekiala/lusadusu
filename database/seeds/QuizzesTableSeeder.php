@@ -1,5 +1,7 @@
 <?php
 
+use App\Assertion;
+use App\Quiz;
 use Illuminate\Database\Seeder;
 
 class QuizzesTableSeeder extends Seeder
@@ -11,11 +13,11 @@ class QuizzesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Quiz::class, 10)->create()->each(function ($quiz) {
+        factory(Quiz::class, 10)->create()->each(function ($quiz) {
 
             for ($i = 0; $i < 3; $i ++) {
 
-                $quiz->assertions()->save(factory(\App\Assertion::class)->make());
+                $quiz->assertions()->save(factory(Assertion::class)->make());
             }
         });
     }
