@@ -9,12 +9,13 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "ext-bcmath": "*",
+        "ext-curl": "*",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/helpers": "^1.1",
         "laravel/tinker": "^2.0",
-        "ext-curl": "*",
-        "ext-bcmath": "*"
+        "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

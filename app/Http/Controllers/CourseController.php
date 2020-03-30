@@ -24,7 +24,7 @@ class CourseController extends Controller
 
     public function lessons(Course $course)
     {
-        return response()->json($course->lessons(), 200);
+        return response()->json($course->lessons, 200);
     }
 
     public function discussion(Course $course)

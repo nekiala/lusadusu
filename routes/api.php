@@ -55,6 +55,7 @@ Route::get('categories/{category}', 'CategoryController@show');
 Route::post('categories', 'CategoryController@store');
 Route::put('categories/{category}', 'CategoryController@update');
 Route::delete('categories/{category}', 'CategoryController@delete');
+Route::patch('categories/{category}', 'CategoryController@status');
 
 Route::get('questions', 'QuestionController@index');
 Route::get('questions/latest/{user}/{limit}', 'QuestionController@latest');
@@ -106,6 +107,7 @@ Route::put('lessons/{lesson}', 'LessonController@update');
 Route::patch('lessons/{lesson}', 'LessonController@change');
 Route::delete('lessons/{lesson}', 'LessonController@delete');
 Route::get('lessons/{lesson}/quizzes', 'LessonController@quizzes');
+Route::post('lessons/import/{course}', 'LessonController@import');
 
 Route::get('modes', 'ModeController@index');
 Route::get('modes/{mode}', 'ModeController@show');

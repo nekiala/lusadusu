@@ -1,5 +1,7 @@
 <?php
 
+use App\Course;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 
 class CoursesTableSeeder extends Seeder
@@ -11,11 +13,11 @@ class CoursesTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         for ($i = 0; $i < 5; $i ++) {
 
-            \App\Course::create([
+            Course::create([
                 'title' => $faker->unique()->city,
                 'material_id' => 3,
                 'description' => $faker->realText(150)

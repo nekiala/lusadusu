@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
+use App\Imports\LessonsImport;
 use App\Lesson;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LessonController extends Controller
 {
     public function index()
     {
-        $lessons = Lesson::all();
+        $lessons = Lesson::paginate();
 
         return response()->json($lessons, 200);
     }
@@ -50,5 +53,12 @@ class LessonController extends Controller
         $lesson->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function import(Request $request, Course $course)
+    {
+        Excel::import(new LessonsImport(), $request->file('import.xlsx'));
+
+        return response()->json(null, 200);
     }
 }

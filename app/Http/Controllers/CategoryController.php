@@ -65,4 +65,13 @@ class CategoryController extends Controller
 
         return response()->json(null, 204);
     }
+
+
+
+    public function status(Request $request, Category $category)
+    {
+        $category->update($request->all());
+
+        return response()->json($category, 200);
+    }
 }

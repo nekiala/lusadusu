@@ -25,9 +25,10 @@ trait CodeGeneratorTrait
         return $code;
     }
 
-    protected function generatePaymentCode($len = 8)
+    protected function generatePaymentCode($user_id, $len = 8)
     {
-        if ($lastTr = Payment::latest('transaction_code')->whereNotNull('transaction_code')->first()) {
+        if ($lastTr = Payment::whereNotNull('transaction_code')
+            ->where('user_id', $user_id)->latest('transaction_code')->first()) {
 
             $code = $this->transactionCodeGenerator(substr($lastTr->transaction_code, strpos($lastTr->transaction_code, "-") + 1), $len);
 

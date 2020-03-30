@@ -8,6 +8,7 @@ use App\Commission;
 use App\Exam;
 use App\Http\Traits\CodeGeneratorTrait;
 use App\Jobs\CalculateCommission;
+use App\Mail\NewCommissionCollected;
 use App\Mail\PaymentCompletedMail;
 use App\Payment;
 use App\PaymentMethod;
@@ -21,7 +22,7 @@ class PaymentController extends Controller
 
     public function index()
     {
-        $payments = Payment::all();
+        $payments = Payment::paginate();
 
         return response()->json($payments, 200);
     }
@@ -138,8 +139,9 @@ class PaymentController extends Controller
         $endpoint = strval($request->get('endpoint'));
         $transaction_type = 2;
         $user_id = intval($request->get('user_id'));
-        $transaction_code = sprintf("P%d-%s", $user_id, $this->generatePaymentCode());
+        $transaction_code = sprintf("P%d-%s", $user_id, $this->generatePaymentCode($user_id));
         $callback_url = sprintf(env('API_CALLBACK_URL'), $transaction_code);
+        $language = $request->get('language');
 
         $description = "Test Payment NTOPROG";
 
@@ -152,7 +154,8 @@ class PaymentController extends Controller
             'phone_number' => $phone_number,
             'transaction_type' => $transaction_type,
             'description' => $description,
-            'callback_url' => $callback_url
+            'callback_url' => $callback_url,
+            'language' => $language
         ];
 
         $payload = http_build_query($data);
@@ -245,6 +248,9 @@ class PaymentController extends Controller
 
                 // send email
                 Mail::to($payment->user)->queue(new PaymentCompletedMail($payment, $payment->user));
+
+                // notify the up line affiliate member about his new commission
+                Mail::to($user)->queue(new NewCommissionCollected($payment->amount * 0.01, $user));
             }
         }
 

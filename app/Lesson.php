@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static paginate()
+ */
 class Lesson extends Model
 {
     protected $fillable = [
@@ -28,7 +31,10 @@ class Lesson extends Model
 
     public function scopeRandLesson($query, $course_id)
     {
-        return $query->where('status', 1)->where('course_id', $course_id)->inRandomOrder()->first();
+        return $query->where([
+            'status' => 1,
+            'course_id' => $course_id
+        ])->inRandomOrder()->first();
     }
 
     public function scopeLessonName($query, $id) {
