@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Question;
 use Illuminate\Http\Request;
+use App\Http\Resources\Question as QuestionResource;
 
 class QuestionController extends Controller
 {
     public function index()
     {
-        $questions = Question::all();
+        $questions = Question::paginate();
 
         return response()->json($questions, 200);
     }
@@ -39,7 +40,7 @@ class QuestionController extends Controller
 
     public function show(Question $question)
     {
-        return $question;
+        return new QuestionResource($question);
     }
 
     public function discussion(Question $question)

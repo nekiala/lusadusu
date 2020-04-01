@@ -22,6 +22,11 @@ class Course extends Model
         return $this->hasMany(Lesson::class);
     }
 
+    public function getLessonCountAttribute()
+    {
+        return $this->hasMany(Lesson::class)->whereCourseId($this->id)->count();
+    }
+
     public function payments()
     {
         return $this->hasMany(Payment::class);

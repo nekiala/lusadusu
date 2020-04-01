@@ -6,12 +6,31 @@ use App\Course;
 use App\Material;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Resources\MaterialCollection;
 
 class MaterialController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $materials = Material::all();
+        $query = Material::query();
+
+        $query->when($request->filled('filter'), function ($query) {
+
+            $filters = explode(',', \request('filter'));
+            $find = ['material'];
+            $replace = ['material_id'];
+
+            foreach ($filters as $filter) {
+
+                [$criteria, $value] = explode(':', $filter);
+
+                $query->where(str_replace($find, $replace, $criteria), $value);
+            }
+
+            return $query;
+        });
+
+        $materials = new MaterialCollection($query->paginate());
 
         return response()->json($materials, 200);
     }

@@ -18,6 +18,11 @@ class Question extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function scopeUserLastQuestions($query, $user_id, $limit)
     {
         return $query->where('user_id', $user_id)->orderBy('id', 'desc')->limit($limit);
