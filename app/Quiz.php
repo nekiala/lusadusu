@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @method static paginate()
+ */
 class Quiz extends Model
 {
     protected $fillable = ['lesson_id', 'question', 'type', 'status'];

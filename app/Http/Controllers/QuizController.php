@@ -6,9 +6,11 @@ use App\Answer;
 use App\Assertion;
 use App\Exam;
 use App\ExamParameter;
+use App\Http\Resources\QuizCollection;
 use App\Http\Traits\ScoreCalculatorTrait;
 use App\Quiz;
 use Illuminate\Http\Request;
+use App\Http\Resources\Quiz as QuizRessource;
 
 class QuizController extends Controller
 {
@@ -16,14 +18,14 @@ class QuizController extends Controller
 
     public function index()
     {
-        $quizzes = Quiz::all();
+        $quizzes = new QuizCollection(Quiz::paginate());
 
         return response()->json($quizzes, 200);
     }
 
     public function show(Quiz $quiz)
     {
-        return $quiz;
+        return new QuizRessource($quiz);
     }
 
     public function assertions(Quiz $quiz)
