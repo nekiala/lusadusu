@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Answer;
 use App\Assertion;
 use App\Exam;
 use App\ExamParameter;
+use App\Http\Resources\ExamCollection;
 use App\Http\Traits\ScoreCalculatorTrait;
 use App\Lesson;
 use App\Mode;
-use App\Question;
 use App\Quiz;
-use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Resources\Exam as ExamResource;
 
 class ExamController extends Controller
 {
@@ -21,42 +21,49 @@ class ExamController extends Controller
 
     public function index()
     {
-        $exams = Exam::all();
+        $exams = new ExamCollection(Exam::paginate());
 
-        return response()->json($exams, 200);
+        return response()->json($exams, Response::HTTP_OK);
+    }
+
+    public function today()
+    {
+        $exams = new ExamCollection(Exam::today()->paginate());
+
+        return response()->json($exams, Response::HTTP_OK);
     }
 
     public function show(Exam $exam)
     {
-        return $exam;
+        return new ExamResource($exam);
     }
 
     public function store(Request $request)
     {
         $exam =  Exam::create($request->all());
 
-        return response()->json($exam, 201);
+        return response()->json($exam, Response::HTTP_CREATED);
     }
 
     public function update(Request $request, Exam $exam)
     {
         $exam->update($request->all());
 
-        return response()->json($exam, 200);
+        return response()->json($exam, Response::HTTP_OK);
     }
 
     public function change(Request $request, Exam $exam)
     {
         $exam->update($request->all());
 
-        return response()->json($exam, 200);
+        return response()->json($exam, Response::HTTP_OK);
     }
 
     public function delete(Exam $exam)
     {
         $exam->delete();
 
-        return response()->json(null, 204);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
     public function prepare(Request $request)
@@ -81,7 +88,7 @@ class ExamController extends Controller
                 $lesson = $exam->lesson()->first();
                 $lesson->exam_id = $exam->id;
 
-                return response()->json($lesson, 200);
+                return response()->json($lesson, Response::HTTP_OK);
             }
 
             // if the course has started, check if the session has not yet expired
@@ -97,7 +104,7 @@ class ExamController extends Controller
         $lesson = Lesson::randLesson($course_id);
 
         if (!isset($lesson->id))
-            return response()->json(null, 404);
+            return response()->json(null, Response::HTTP_NOT_FOUND);
 
         $mode = Mode::find($mode_id);
 
@@ -115,7 +122,7 @@ class ExamController extends Controller
         // inject exam_id to lesson
         $lesson->exam_id = $exam->id;
 
-        return response()->json($lesson, 200);
+        return response()->json($lesson, Response::HTTP_OK);
     }
 
     public function start(Request $request, Exam $exam)
@@ -129,7 +136,7 @@ class ExamController extends Controller
         }
 
         // get quizzes count
-        $quizzes = Quiz::where(['lesson_id' => $exam->lesson_id, 'status' => 1])->count();
+        $quizzes = Quiz::getActiveCountByLesson($exam->lesson_id, 1);
 
         // get a random quiz from not already asked quiz list
         $randomQuiz = Quiz::notAsked($exam->id, $exam->lesson_id)->inRandomOrder()->first();
@@ -148,7 +155,7 @@ class ExamController extends Controller
 
             // setup exam duration
             // the user is supposed to finish his exam within that duration
-            $duration = ExamParameter::where('status', 1)->first()->duration;
+            $duration = ExamParameter::getDurationFromActiveParameter(1);
 
             $nowDate = new \DateTime('now');
 
@@ -171,10 +178,10 @@ class ExamController extends Controller
                 'in_seconds' => false // determines if times is already converted in seconds
             ];
 
-            return response()->json($response, 200);
+            return response()->json($response, Response::HTTP_OK);
         }
 
-        return response()->json($exam, 201);
+        return response()->json($exam, Response::HTTP_CREATED);
     }
 
     public function close(Exam $exam)
@@ -200,15 +207,15 @@ class ExamController extends Controller
 
     public function stats($user_id)
     {
-        $total_exams = Exam::where('user_id', $user_id)->count();
-        $success = Exam::where(['user_id' => $user_id, 'passed' => 1])->count();
-        $fails = Exam::where(['user_id' => $user_id, 'passed' => 0])->count();
+        $total_exams = Exam::getCountByUser($user_id);
+        $success = Exam::getCountByUserAndPassStatus($user_id, 1);
+        $fails = Exam::getCountByUserAndPassStatus($user_id, 0);
 
         return response()->json([
             'overall' => $total_exams,
             'fails' => $fails,
             'successes' => $success
-        ], 201);
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -259,10 +266,10 @@ class ExamController extends Controller
                 ];
             }
 
-            return response()->json($output, 200);
+            return response()->json($output, Response::HTTP_OK);
 
         }
 
-        return response()->json(null, 404);
+        return response()->json(null, Response::HTTP_NOT_FOUND);
     }
 }

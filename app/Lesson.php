@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static paginate()
+ * @method static randLesson($course_id)
+ * @method static lessonName($lesson_id)
  */
 class Lesson extends Model
 {
@@ -22,6 +24,11 @@ class Lesson extends Model
     public function exams()
     {
         return $this->hasMany(Exam::class);
+    }
+
+    public function getExamCountAttribute()
+    {
+        return $this->hasMany(Exam::class)->count();
     }
 
     public function quizzes()

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\AffiliateMember;
 use App\Balance;
-use App\Commission;
-use App\Exam;
 use App\Http\Traits\CodeGeneratorTrait;
 use App\Jobs\CalculateCommission;
 use App\Mail\NewCommissionCollected;

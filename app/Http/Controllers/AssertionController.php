@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Assertion;
+use App\Imports\AssertionsImport;
+use App\Imports\LessonsImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AssertionController extends Controller
 {
@@ -45,5 +49,16 @@ class AssertionController extends Controller
         $assertion->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function import(Request $request, int $quiz_id)
+    {
+        $path = $request->file('assertions')->store('import');
+
+        Excel::import(new AssertionsImport($quiz_id), $path);
+
+        Storage::delete($path);
+
+        return response()->json(null, 200);
     }
 }

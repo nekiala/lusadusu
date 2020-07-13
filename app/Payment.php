@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static create(array $data)
+ * @method static where(string $string, string $strval)
+ * @method static paginate()
  */
 class Payment extends Model
 {

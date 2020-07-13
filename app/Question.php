@@ -4,6 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static userLastQuestions($user_id, $limit)
+ * @method static paginate()
+ * @method static paginateByOrderDesc()
+ * @method static paginateWithByStatusAndByOrderDesc(int $int)
+ */
 class Question extends Model
 {
     protected $fillable = ['category_id', 'user_id', 'subject', 'description', 'notify', 'status', 'is_public'];
@@ -34,5 +40,10 @@ class Question extends Model
             'is_public' => 1,
             'category_id' => $category_id
         ])->count();
+    }
+
+    public function scopePaginateByOrderDesc($query)
+    {
+        return $query->orderBy('id', 'desc')->paginate();
     }
 }

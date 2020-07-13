@@ -10,7 +10,27 @@ class QuestionController extends Controller
 {
     public function index()
     {
-        $questions = Question::paginate();
+        $query = array_keys(\request()->query());
+
+        if (in_array('descOrder', $query)) {
+
+            if (in_array('unsolved', $query)) {
+
+                $questions = Question::paginateWithByStatusAndByOrderDesc(0);
+
+            } elseif (in_array('solved', $query)) {
+
+                $questions = Question::paginateWithByStatusAndByOrderDesc(1);
+
+            } else {
+
+                $questions = Question::paginateByOrderDesc();
+            }
+
+        } else {
+
+            $questions = Question::paginate();
+        }
 
         return response()->json($questions, 200);
     }

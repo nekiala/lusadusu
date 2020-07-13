@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +100,7 @@ Route::put('courses/{course}', 'CourseController@update');
 Route::patch('courses/{course}', 'CourseController@status');
 Route::delete('courses/{course}', 'CourseController@delete');
 Route::get('courses/{course}/lessons', 'CourseController@lessons');
+Route::post('courses/import/{material}', 'CourseController@import');
 
 Route::get('lessons', 'LessonController@index');
 Route::get('lessons/{lesson}', 'LessonController@show');
@@ -124,6 +126,7 @@ Route::put('quizzes/{quiz}', 'QuizController@update');
 Route::patch('quizzes/{quiz}', 'QuizController@change');
 Route::delete('quizzes/{quiz}', 'QuizController@delete');
 Route::get('quizzes/{quiz}/assertions', 'QuizController@assertions');
+Route::post('quizzes/import/{lesson}', 'QuizController@import');
 
 Route::get('assertions', 'AssertionController@index');
 Route::get('assertions/{assertion}', 'AssertionController@show');
@@ -131,9 +134,11 @@ Route::post('assertions', 'AssertionController@store');
 Route::put('assertions/{assertion}', 'AssertionController@update');
 Route::patch('assertions/{assertion}', 'AssertionController@change');
 Route::delete('assertions/{assertion}', 'AssertionController@delete');
+Route::post('assertions/import/{quiz}', 'AssertionController@import');
 
 Route::get('exams', 'ExamController@index');
 Route::put('exams/prepare', 'ExamController@prepare');
+Route::get('exams/today', 'ExamController@today');
 Route::get('exams/{exam}', 'ExamController@show');
 Route::post('exams', 'ExamController@store');
 Route::put('exams/{exam}', 'ExamController@update');

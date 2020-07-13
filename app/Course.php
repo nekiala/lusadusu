@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @method static create(array $all)
+ */
 class Course extends Model
 {
     protected $fillable = [

@@ -8,9 +8,14 @@ use App\Exam;
 use App\ExamParameter;
 use App\Http\Resources\QuizCollection;
 use App\Http\Traits\ScoreCalculatorTrait;
+use App\Imports\AssertionsImport;
+use App\Imports\QuizzesImport;
 use App\Quiz;
 use Illuminate\Http\Request;
 use App\Http\Resources\Quiz as QuizRessource;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class QuizController extends Controller
 {
@@ -20,7 +25,7 @@ class QuizController extends Controller
     {
         $quizzes = new QuizCollection(Quiz::paginate());
 
-        return response()->json($quizzes, 200);
+        return response()->json($quizzes, Response::HTTP_OK);
     }
 
     public function show(Quiz $quiz)
@@ -30,35 +35,35 @@ class QuizController extends Controller
 
     public function assertions(Quiz $quiz)
     {
-        return response()->json($quiz->assertions()->get(), 201);
+        return response()->json($quiz->assertions()->get(), Response::HTTP_OK);
     }
 
     public function store(Request $request)
     {
         $quiz =  Quiz::create($request->all());
 
-        return response()->json($quiz, 201);
+        return response()->json($quiz, Response::HTTP_CREATED);
     }
 
     public function update(Request $request, Quiz $quiz)
     {
         $quiz->update($request->all());
 
-        return response()->json($quiz, 200);
+        return response()->json($quiz, Response::HTTP_OK);
     }
 
     public function change(Request $request, Quiz $quiz)
     {
         $quiz->update($request->all());
 
-        return response()->json($quiz, 200);
+        return response()->json($quiz, Response::HTTP_OK);
     }
 
     public function delete(Quiz $quiz)
     {
         $quiz->delete();
 
-        return response()->json(null, 204);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
     public function get(Request $request)
@@ -89,7 +94,7 @@ class QuizController extends Controller
             return response()->json([
                 'victory' => intval($examPassed),
                 'score' => strval($exam->percentage_obtained) . '%'
-            ], 201);
+            ], Response::HTTP_CREATED);
 
         } else {
 
@@ -146,7 +151,7 @@ class QuizController extends Controller
                     'in_seconds' => boolval($time > 0) // determines if times is already converted in seconds
                 ];
 
-                return response()->json($response, 200);
+                return response()->json($response, Response::HTTP_OK);
 
             } else {
 
@@ -165,10 +170,21 @@ class QuizController extends Controller
                 return response()->json([
                     'victory' => intval($examPassed),
                     'score' => strval($exam->percentage_obtained) . '%'
-                ], 201);
+                ], Response::HTTP_CREATED);
 
             }
         }
 
+    }
+
+    public function import(Request $request, int $lesson_id)
+    {
+        $path = $request->file('quizzes')->store('import');
+
+        Excel::import(new QuizzesImport($lesson_id), $path);
+
+        Storage::delete($path);
+
+        return response()->json(null, Response::HTTP_OK);
     }
 }

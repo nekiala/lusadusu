@@ -3,7 +3,14 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="110471ad-e28b-4522-98d4-533c69990f9a" name="ONET" url="http://cloud-7372228.onetsolutions.network">
-        <fileTransfer accessType="SFTP" host="185.163.126.107" port="22" sshConfig="root@185.163.126.107:22 (p)">
+        <fileTransfer accessType="SFTP" host="185.163.126.107" port="22" sshConfigId="4cee8b68-f0bb-4b4f-be0a-4284677c9861" sshConfig="root@185.163.126.107:22 (p)">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="1abb21cf-24df-4a36-9ad8-a0389e18e498" name="OVH" url="http://vps203071.vps.ovh.ca:8083/">
+        <fileTransfer rootFolder="/var/www/html/lusadusu.ntoprog.org" accessType="SFTP" host="144.217.83.131" port="22" sshConfigId="0b87ad53-df74-446e-ba61-d78acab85d89" sshConfig="root@144.217.83.131:22 password">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * @method static paginate()
+ * @method static notAsked($id, int $lesson_id)
+ * @method static alreadyAsked(int $id)
+ * @method static getActiveCountByLesson(int $lesson_id, int $int)
  */
 class Quiz extends Model
 {
@@ -32,5 +35,10 @@ class Quiz extends Model
     {
         return $query->where('status', 1)
             ->whereIn('id', DB::table('answers')->where('exam_id', $exam_id)->pluck('quiz_id'));
+    }
+
+    public function scopeGetActiveCountByLesson($query, $lesson_id)
+    {
+        return $query->where(['lesson_id' => $lesson_id, 'status' => 1])->count();
     }
 }

@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LessonCollection;
 use App\Imports\LessonsImport;
 use App\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Resources\Lesson as LessonResource;
 
 class LessonController extends Controller
 {
     public function index()
     {
-        $lessons = Lesson::paginate();
+        $lessons = new LessonCollection(Lesson::paginate());
 
         return response()->json($lessons, 200);
     }
 
     public function show(Lesson $lesson)
     {
-        return $lesson;
+        return new LessonResource($lesson);
     }
 
     public function quizzes(Lesson $lesson)
