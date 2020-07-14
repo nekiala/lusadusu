@@ -10,6 +10,8 @@ use App\Profile;
 use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -147,5 +149,27 @@ class UserController extends Controller
             'api_token' => $user->generateToken(),
             'city_name' => City::find($profile->city_id)->name
         ], 200);
+    }
+
+    public function login(Request $request)
+    {
+        if (Auth::attempt($request->only('email', 'password'))) {
+
+            $user = Auth::user();
+            $success = $user->createToken('appToken')->accessToken;
+
+            //After successful authentication, notice how I return json parameters
+            return response()->json([
+                'success' => true,
+                'user' => $user,
+                'token' => $success
+            ], Response::HTTP_OK);
+
+        } else {
+            //if authentication is unsuccessful, notice how I return json parameters
+            return \response()->json([
+                'message' => 'Invalid Email or Password',
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 }
