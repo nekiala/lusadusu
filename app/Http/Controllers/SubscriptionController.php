@@ -6,7 +6,7 @@ use App\Http\Resources\SubscriptionCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class Subscription extends Controller
+class SubscriptionController extends Controller
 {
     /**
      * Display a listing of the resource.

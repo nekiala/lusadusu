@@ -178,3 +178,6 @@ Route::resource('/commissions', 'CommissionController');
 Route::resource('/answers', 'AnswerController');
 
 Route::get('results/check/{code}', 'ResultController@check');
+
+// Dashboard
+Route::get('/dashboard', 'DashboardController@dashboard');

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static paginate()
  * @method static paginateByOrderDesc()
  * @method static paginateWithByStatusAndByOrderDesc(int $int)
+ * @method static countUnsolved()
+ * @method static getNLatestUnsolved(int $int)
  */
 class Question extends Model
 {
@@ -45,5 +47,15 @@ class Question extends Model
     public function scopePaginateByOrderDesc($query)
     {
         return $query->orderBy('id', 'desc')->paginate();
+    }
+
+    public function scopeCountUnsolved($query)
+    {
+        return $query->where('status', 0)->count();
+    }
+
+    public function scopeGetNLatestUnsolved($query, $n)
+    {
+        return $query->where('status', 0)->orderBy('id', 'asc')->limit($n)->get();
     }
 }

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static unstarted($user_id)
  * @method static create(array $all)
  * @method static find(int $exam_id)
+ * @method static countDailyCompletedExams()
  * @property int user_id
  * @property int course_id
  * @property int lesson_id
@@ -94,5 +95,11 @@ class Exam extends Model
             'user_id' => $user_id,
             'passed' => $passed
         ])->count();
+    }
+
+    public function scopeCountDailyCompletedExams($query)
+    {
+        return $query->whereDate('created_at', Carbon::today())
+            ->whereNotNull('finished_at')->count();
     }
 }
