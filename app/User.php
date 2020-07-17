@@ -8,6 +8,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 
+/**
+ * @method static create(array $user_data)
+ * @method static withProfile()
+ * @method static withoutProfile()
+ */
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
@@ -80,5 +85,21 @@ class User extends Authenticatable
     public function exams()
     {
         return $this->hasMany(Exam::class);
+    }
+
+    public function scopeWithProfile($query)
+    {
+        return $query->whereIn('id', function ($result) {
+            $result->select('user_id')
+                ->from(with(new Profile)->getTable());
+        })->get();
+    }
+
+    public function scopeWithoutProfile($query)
+    {
+        return $query->whereNotIn('id', function ($result) {
+            $result->select('user_id')
+                ->from(with(new Profile)->getTable());
+        })->get();
     }
 }

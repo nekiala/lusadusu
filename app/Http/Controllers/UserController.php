@@ -18,9 +18,16 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::withoutProfile();
 
-        return response()->json($users, 200);
+        return response()->json($users, Response::HTTP_OK);
+    }
+
+    public function learners()
+    {
+        $users = User::withProfile();
+
+        return \response()->json($users, Response::HTTP_OK);
     }
 
     public function show(User $user)
@@ -37,31 +44,31 @@ class UserController extends Controller
     {
         $affiliateUsers = User::where('affiliate_code', $affiliate_code)->get();
 
-        return response()->json($affiliateUsers, 200);
+        return response()->json($affiliateUsers, Response::HTTP_OK);
     }
 
     public function update(Request $request, User $user)
     {
         $user->update($request->all());
 
-        return response()->json($user, 200);
+        return response()->json($user, Response::HTTP_OK);
     }
 
     public function delete(User $user)
     {
         $user->delete();
 
-        return response()->json(null, 204);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
     public function store(Request $request)
     {
-        $user_name = strval($request->user_name);
-        $user_email = strval($request->user_email);
-        $user_phone = strval($request->user_phone);
-        $user_gender = strval($request->user_gender);
-        $user_profession = strval($request->user_profession);
-        $affiliate_code = strval($request->affiliate_code);
+        $user_name = strval($request->get('user_name'));
+        $user_email = strval($request->get('user_email'));
+        $user_phone = strval($request->get('user_phone'));
+        $user_gender = strval($request->get('user_gender'));
+        $user_profession = strval($request->get('user_profession'));
+        $affiliate_code = strval($request->get('affiliate_code'));
 
         $gendersArray = [
             'male' => 1,
@@ -120,7 +127,7 @@ class UserController extends Controller
 
         } catch (QueryException $exception) {
 
-            return response()->json($exception->getMessage(), 409);
+            return response()->json($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
         // save profile data
@@ -138,17 +145,21 @@ class UserController extends Controller
         } catch (QueryException $exception) {
 
             // delete the affiliate member, balance and user records
-            $affiliateMember->delete();
+            if ($affiliateMember) {
+                $affiliateMember->delete();
+            }
+
             $balance->delete();
             $user->delete();
-            return response()->json($exception->getMessage(), 409);
+
+            return response()->json($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
         return response([
             'id' => $user->id,
             'api_token' => $user->generateToken(),
             'city_name' => City::find($profile->city_id)->name
-        ], 200);
+        ], Response::HTTP_OK);
     }
 
     public function login(Request $request)

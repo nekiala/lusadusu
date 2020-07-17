@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static countDailyProfiles()
+ * @method static create(array $profile_data)
  */
 class Profile extends Model
 {

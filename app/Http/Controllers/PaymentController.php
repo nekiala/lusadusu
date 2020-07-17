@@ -210,7 +210,9 @@ class PaymentController extends Controller
     {
         $payment = Payment::where('transaction_code', strval($transaction_code))->first();
 
-        $payment->status = intval($request->get('code')) == 200 ? 1 : 0;
+        $valid_codes = [0, 200]; // 200 for om
+
+        $payment->status = in_array(intval($request->get('code')), $valid_codes) ? 1 : 0;
 
         $payment->save();
 

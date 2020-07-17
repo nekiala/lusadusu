@@ -46,6 +46,7 @@ Route::put('cities/{city}', 'CityController@update');
 Route::delete('cities/{city}', 'CityController@delete');
 
 Route::get('users', 'UserController@index');
+Route::get('users/learners', 'UserController@learners');
 Route::get('users/affiliate/{id}', 'UserController@affiliate');
 Route::get('users/{user}', 'UserController@show');
 Route::post('users', 'UserController@store');
